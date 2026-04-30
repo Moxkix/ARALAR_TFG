@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TFG Aralar · Diagnóstico pastoral por teledetección</title>
+  <meta name="description" content="Trabajo de Fin de Grado sobre el diagnóstico pastoral del Parque Natural de Aralar mediante teledetección Sentinel-2, modelización climática con GAM y triangulación cuádruple del IPP. UPV/EHU 2026.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="brand">
+      <h1>TFG Aralar</h1>
+      <p class="subtitle">Diagnóstico pastoral del Parque Natural de Aralar mediante teledetección y modelización climática</p>
+      <p class="meta">Grado en Geografía y Ordenación del Territorio · UPV/EHU · 2026 · LIFE Oreka Mendian</p>
+    </div>
+    <nav>
+      <a href="#resumen">Resumen</a>
+      <a href="#metodo">Metodología</a>
+      <a href="#mapas">Mapas</a>
+      <a href="#graficos">Gráficos</a>
+      <a href="#documentos">Documentos</a>
+      <a href="#transparencia">Transparencia</a>
+      <a href="#repositorio">Repositorio</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section id="resumen" class="hero">
+  <div class="container">
+    <h2>El proyecto en una mirada</h2>
+    <div class="hero-grid">
+      <div class="hero-text">
+        <p class="lead">¿Cuánto del LAI deficiente del pasto subalpino atlántico de Aralar es atribuible al pastoreo y cuánto al clima? Este TFG construye un sistema de diagnóstico pastoral usando series Sentinel-2 invertidas con PROSAIL, modelización climática con GAM y <strong>cuatro estrategias del IPP</strong> que se trianguian para producir un diagnóstico robusto.</p>
+        <p>Aplicado al ZEC ES2120011 Parque Natural de Aralar entre 2018 y 2025, el sistema revela un <strong>patrón cuasi-bianual</strong> de presión pastoral: crisis en 2020, 2022 y 2025, alternadas con relajación en 2023.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-num">8</div><div class="stat-label">años de serie temporal</div></div>
+        <div class="stat"><div class="stat-num">4</div><div class="stat-label">estrategias del IPP</div></div>
+        <div class="stat"><div class="stat-num">0.91</div><div class="stat-label">r medio LOYO</div></div>
+        <div class="stat"><div class="stat-num">96</div><div class="stat-label">mapas generados</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="metodo">
+  <div class="container">
+    <h2>Metodología por triangulación</h2>
+    <p class="intro">El diagnóstico se construye combinando cuatro estrategias metodológicamente independientes. Cada una responde a la misma pregunta desde un ángulo distinto, y la convergencia de signo entre ellas es el criterio operativo de robustez.</p>
+    <div class="figure">
+      <img src="figures/esquema_4_estrategias.png" alt="Las cuatro estrategias del IPP">
+      <p class="caption">Las cuatro estrategias del IPP. Cada una con su limitación específica que las demás compensan.</p>
+    </div>
+    <div class="strategies">
+      <div class="strategy strategy-A">
+        <h3>A · GAM climático</h3>
+        <p>Modelo G6 ajustado sobre el LAI agregado del AOI. El residuo (observado − predicho) es la señal pastoral.</p>
+        <div class="formula">IPP_A = (LAI_obs − LAI_G6) / LAI_obs</div>
+      </div>
+      <div class="strategy strategy-B">
+        <h3>B · Pseudo-referencia</h3>
+        <p>Modelo entrenado solo con zonas de pasto remoto (referencia interna menos pastoreada). Anomalía respecto a esa referencia.</p>
+        <div class="formula">IPP_B = anomalía vs ref. interna</div>
+      </div>
+      <div class="strategy strategy-C">
+        <h3>C · Anomalía espacial</h3>
+        <p>Comparación con la mediana del AOI en cada fecha. No necesita modelo ni referencia, foto instantánea.</p>
+        <div class="formula">IPP_C = (LAI − mediana) / mediana</div>
+      </div>
+      <div class="strategy strategy-D">
+        <h3>D · Referencia hayedo</h3>
+        <p>El hayedo como termómetro climático. Diferencia de anomalías respecto a las fenologías propias multianuales. <em>Limitación: resiliencia diferencial pasto-hayedo (ver § Transparencia).</em></p>
+        <div class="formula">IPP_D = anom_pasto − anom_hayedo</div>
+      </div>
+    </div>
+    <div class="figure">
+      <img src="figures/esquema_pipeline.png" alt="Arquitectura del pipeline">
+      <p class="caption">Arquitectura completa del pipeline en cinco fases secuenciales (PROSAIL, GEE, ERA5, R, cartografía Python).</p>
+    </div>
+  </div>
+</section>
+
+<section id="mapas" class="alt">
+  <div class="container">
+    <h2>Galería de mapas pastorales</h2>
+    <p class="intro">12 productos cartográficos por año para la serie 2018-2025. Selecciona año y producto para visualizar el mapa correspondiente.</p>
+
+    <div class="map-controls">
+      <div class="control">
+        <label for="year-select">Año</label>
+        <select id="year-select">
+          <option value="2018">2018 (transición)</option>
+          <option value="2019">2019 (equilibrio)</option>
+          <option value="2020" class="crisis">2020 (CRISIS FUERTE)</option>
+          <option value="2021">2021 (transición)</option>
+          <option value="2022" selected class="crisis">2022 (CRISIS)</option>
+          <option value="2023" class="relax">2023 (RELAJACIÓN)</option>
+          <option value="2024">2024 (mixto)</option>
+          <option value="2025" class="crisis">2025 (CRISIS moderada)</option>
+        </select>
+      </div>
+      <div class="control">
+        <label for="product-select">Producto</label>
+        <select id="product-select">
+          <option value="ipp_consenso" selected>IPP consenso integrado</option>
+          <option value="ipp_a">IPP A — GAM climático</option>
+          <option value="ipp_b">IPP B — Pseudo-referencia</option>
+          <option value="ipp_c">IPP C — Anomalía espacial</option>
+          <option value="ipp_d">IPP D — Referencia hayedo</option>
+          <option value="concordancia">Mapa de concordancia (k/n)</option>
+          <option value="biomasa">Biomasa estimada (kg/ha)</option>
+          <option value="calidad">Calidad forrajera</option>
+          <option value="carga">Carga admisible (UGM/ha)</option>
+          <option value="balance">Balance forrajero</option>
+          <option value="riesgo">Riesgo de degradación</option>
+          <option value="pendiente">Pendiente (control)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="map-display">
+      <img id="map-image" src="maps/2022/IPP_consenso_2022.png" alt="Mapa pastoral">
+      <p class="caption" id="map-caption">IPP consenso integrado — 2022 (año de crisis pastoral severa, concordancia 4/4)</p>
+    </div>
+
+    <p class="note">Los mapas estarán disponibles tras la ejecución completa del pipeline cartográfico. Si esta página muestra placeholders, el alumno aún no ha subido los GeoTIFFs y PNGs definitivos al repositorio.</p>
+  </div>
+</section>
+
+<section id="graficos">
+  <div class="container">
+    <h2>Síntesis gráfica de resultados</h2>
+    <div class="chart-grid">
+      <div class="chart">
+        <img src="figures/heatmap_IPP_Aralar.png" alt="Heatmap IPP zona × año">
+        <h3>Heatmap del IPP zona × año</h3>
+        <p>Mapa de calor del IPP consenso por anillo y año. Patrón cuasi-bianual claro: 2020/2022/2025 en rojo (crisis), 2023 en verde (relajación).</p>
+      </div>
+      <div class="chart">
+        <img src="figures/Flujograma_Metodologico_v2.png" alt="Flujograma metodológico">
+        <h3>Flujograma metodológico</h3>
+        <p>Esquema integral del pipeline con todas las fases F1-F5, los datos intermedios, las correcciones aplicadas y el diagnóstico integrado final.</p>
+      </div>
+      <div class="chart">
+        <img src="figures/esquema_4_estrategias.png" alt="Las 4 estrategias">
+        <h3>Esquema de las 4 estrategias</h3>
+        <p>Cada estrategia con su pregunta, fórmula y limitación. La convergencia entre estrategias es el criterio de robustez.</p>
+      </div>
+      <div class="chart">
+        <img src="figures/esquema_pipeline.png" alt="Arquitectura pipeline">
+        <h3>Arquitectura del pipeline</h3>
+        <p>Vista compacta del pipeline en cinco fases con resultado integrado: gradiente espacial, oscilación interanual y convergencia 4/4.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="documentos" class="alt">
+  <div class="container">
+    <h2>Documentos del proyecto</h2>
+    <div class="docs-grid">
+      <a href="docs/Dossier_TFG_Aralar_v3.docx" class="doc">
+        <div class="doc-icon">📄</div>
+        <h3>Dossier técnico v3</h3>
+        <p>Documento integral de supervisión: 27 páginas con metodología completa, resultados, discusión y bibliografía exhaustiva.</p>
+        <span class="doc-format">Word · 27 páginas</span>
+      </a>
+      <a href="docs/Anexo_Didactico_TFG_Aralar_v2.docx" class="doc">
+        <div class="doc-icon">📚</div>
+        <h3>Anexo didáctico v2</h3>
+        <p>Guía de estudio: estadística asequible, las 4 estrategias con analogías, banco de 15 preguntas tipo tribunal y guion para defensa oral.</p>
+        <span class="doc-format">Word · 20 páginas</span>
+      </a>
+      <a href="docs/Explicacion_Estrategia_D.docx" class="doc">
+        <div class="doc-icon">🔬</div>
+        <h3>Estrategia D explicada</h3>
+        <p>Documento específico sobre la estrategia más original del trabajo: ejemplo numérico paso a paso con el año 2022.</p>
+        <span class="doc-format">Word · 13 páginas</span>
+      </a>
+      <a href="docs/Flujograma_Metodologico_v2.pdf" class="doc">
+        <div class="doc-icon">📊</div>
+        <h3>Flujograma metodológico</h3>
+        <p>Diagrama A3 con la arquitectura completa del pipeline y todos sus componentes.</p>
+        <span class="doc-format">PDF · 1 página A3</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="transparencia" class="alt">
+  <div class="container">
+    <h2>Transparencia metodológica</h2>
+    <p class="intro">Durante el desarrollo del TFG se detectaron y corrigieron tres imprecisiones conceptuales que merecen documentarse abiertamente. Reconocer las limitaciones forma parte del rigor metodológico.</p>
+
+    <div class="transparency-grid">
+      <div class="transparency-item">
+        <h3>📌 Sobre el modelo G6</h3>
+        <p><strong>El modelo G6 está entrenado con la serie del LAI agregado de toda Aralar (LAI_aoi)</strong>, no con zonas de pasto remoto. Las zonas de pasto remoto se utilizan en la Estrategia B (pseudo-referencia interna), no en la A. La frase "G6 entrenado con pasto remoto como referencia sin pastoreo" que aparecía en versiones anteriores es incorrecta.</p>
+      </div>
+
+      <div class="transparency-item">
+        <h3>🌳 Resiliencia diferencial pasto-hayedo</h3>
+        <p>El hayedo no es un termómetro climático perfecto. Pasto y hayedo difieren en sistema radicular, inercia foliar, reservas de carbono y microclima del dosel. <strong>El hayedo es ecológicamente más resiliente al estrés climático que el pasto</strong>. Una parte del IPP_D negativo puede reflejar resiliencia diferencial fisiológica, no pastoreo. La defensa del método se basa en tres argumentos: (1) variabilidad interanual del IPP_D demasiado grande para fisiología constante, (2) gradiente espacial cercano > intermedio > remoto imposible de explicar fisiológicamente, (3) convergencia con A, B y C que no usan el hayedo.</p>
+      </div>
+
+      <div class="transparency-item">
+        <h3>📊 R² de la red neuronal</h3>
+        <p>Los R² altos (0.85-0.92) que aparecen en algunas referencias bibliográficas corresponden a Gaussian Process Regression (GPR), no a redes neuronales simples. Los estudios publicados con arquitectura comparable (MLP de una capa oculta tipo SNAP biophysical processor) reportan R² entre 0.55 y 0.73 en validación contra campo (Croci et al. 2022; SNAP ATBD). <strong>El R² = 0.78 obtenido en este TFG sobre la propia LUT es coherente con esa horquilla y de hecho ligeramente superior.</strong></p>
+      </div>
+
+      <div class="transparency-item">
+        <h3>🌲 LUT específica de hayedo: contribución original</h3>
+        <p>No se ha encontrado bibliografía publicada sobre inversión PROSAIL-NN con LUT específica para Fagus sylvatica. Los estudios cercanos (Kattenborn et al. 2020 sobre bosque centroeuropeo con haya, Srinet et al. 2020 sobre caducifolios tropicales) usan PROSAIL genérico o procesador SNAP. La LUT específica de hayedo de este trabajo es, hasta donde se ha verificado, una contribución original.</p>
+      </div>
+    </div>
+
+    <p class="transparency-note"><em>Para el detalle completo de cada corrección y las respuestas defendibles ante el tribunal, ver el Anexo Didáctico (sección 0) y el Dossier técnico (cap. 0).</em></p>
+  </div>
+</section>
+
+<section id="repositorio">
+  <div class="container">
+    <h2>Repositorio y reproducibilidad</h2>
+    <p class="intro">Todo el código fuente del pipeline está disponible en GitHub bajo licencia Creative Commons BY-NC-ND 4.0. Esto permite la consulta, citación y reproducción del trabajo, pero no su uso comercial ni la distribución de derivados modificados.</p>
+
+    <div class="repo-card">
+      <h3>📦 github.com/&lt;usuario&gt;/tfg-aralar</h3>
+      <ul class="repo-list">
+        <li><code>scripts/python/</code> — Inversión PROSAIL local + entrenamiento NN + cartografía</li>
+        <li><code>scripts/javascript/</code> — Pipeline GEE completo</li>
+        <li><code>scripts/R/</code> — Modelización climática y diagnóstico cuádruple</li>
+        <li><code>data/</code> — CSVs de salida del pipeline</li>
+        <li><code>maps/</code> — 96 mapas cartográficos (12 productos × 8 años)</li>
+        <li><code>figures/</code> — Heatmap y figuras síntesis</li>
+        <li><code>docs/</code> — Dossier, anexo, flujograma</li>
+      </ul>
+      <a href="https://github.com/" class="btn">Ver código fuente completo →</a>
+    </div>
+
+    <div class="cite-box">
+      <h3>Citación sugerida</h3>
+      <pre>[Apellido, Nombre] (2026). Diagnóstico pastoral del Parque Natural
+de Aralar mediante teledetección y modelización climática. Trabajo
+de Fin de Grado, Grado en Geografía y Ordenación del Territorio,
+Universidad del País Vasco / Euskal Herriko Unibertsitatea.
+https://github.com/&lt;usuario&gt;/tfg-aralar</pre>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>Sobre el proyecto</h4>
+        <p>Trabajo de Fin de Grado en Geografía y Ordenación del Territorio (UPV/EHU). Desarrollado en el marco del proyecto LIFE Oreka Mendian (LIFE15 NAT/ES/000762).</p>
+      </div>
+      <div>
+        <h4>Agradecimientos</h4>
+        <ul class="footer-list">
+          <li>HAZI Fundazioa — coordinación LIFE</li>
+          <li>Diputación Foral de Guipúzcoa — cartografía HIC</li>
+          <li>Gobierno de Navarra — datos meteorológicos</li>
+          <li>GeoEuskadi — MDT5</li>
+          <li>ESA / Copernicus — Sentinel-2, ERA5-Land</li>
+          <li>Google Earth Engine</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Licencia</h4>
+        <p>Este trabajo y todo su contenido se publican bajo licencia <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">Creative Commons Atribución-NoComercial-SinDerivadas 4.0 Internacional</a>.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 TFG Aralar · UPV/EHU · Web realizada con HTML/CSS estático sobre GitHub Pages</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const yearSelect = document.getElementById('year-select');
+const productSelect = document.getElementById('product-select');
+const mapImage = document.getElementById('map-image');
+const mapCaption = document.getElementById('map-caption');
+
+const productLabels = {
+  ipp_consenso: 'IPP consenso integrado',
+  ipp_a: 'IPP A — GAM climático',
+  ipp_b: 'IPP B — Pseudo-referencia',
+  ipp_c: 'IPP C — Anomalía espacial',
+  ipp_d: 'IPP D — Referencia hayedo',
+  concordancia: 'Mapa de concordancia píxel a píxel',
+  biomasa: 'Biomasa estimada (kg/ha)',
+  calidad: 'Calidad forrajera',
+  carga: 'Carga admisible (UGM/ha)',
+  balance: 'Balance forrajero',
+  riesgo: 'Riesgo de degradación',
+  pendiente: 'Pendiente (variable de control)'
+};
+
+const yearTags = {
+  2018: 'transición',
+  2019: 'equilibrio',
+  2020: 'año de crisis pastoral severa, concordancia 4/4',
+  2021: 'transición leve hacia presión',
+  2022: 'año de crisis pastoral severa, concordancia 4/4',
+  2023: 'año de relajación pastoral generalizada, concordancia 4/4',
+  2024: 'patrón mixto, concordancia 3/4 por fiabilidad observacional',
+  2025: 'año de crisis moderada, concordancia 4/4'
+};
+
+const productNameMap = {
+  ipp_consenso: 'IPP_consenso',
+  ipp_a: 'IPP_A',
+  ipp_b: 'IPP_B',
+  ipp_c: 'IPP_C',
+  ipp_d: 'IPP_D',
+  concordancia: 'concordancia',
+  biomasa: 'biomasa',
+  calidad: 'calidad',
+  carga: 'carga',
+  balance: 'balance',
+  riesgo: 'riesgo',
+  pendiente: 'pendiente'
+};
+
+function updateMap() {
+  const year = yearSelect.value;
+  const product = productSelect.value;
+  const filename = `maps/${year}/${productNameMap[product]}_${year}.png`;
+  mapImage.src = filename;
+  mapImage.alt = `${productLabels[product]} — ${year}`;
+  mapCaption.textContent = `${productLabels[product]} — ${year} (${yearTags[year]})`;
+}
+
+yearSelect.addEventListener('change', updateMap);
+productSelect.addEventListener('change', updateMap);
+
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+
+</body>
+</html>
