@@ -1,28 +1,33 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="eu">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TFG Aralar · Diagnóstico pastoral por teledetección</title>
-  <meta name="description" content="Trabajo de Fin de Grado sobre el diagnóstico pastoral del Parque Natural de Aralar mediante teledetección Sentinel-2, modelización climática con GAM y triangulación cuádruple del IPP. UPV/EHU 2026.">
+  <title>Aralar GrAL · Larre-diagnostikoa teledetekzioz</title>
+  <meta name="description" content="Gradu Amaierako Lana Aralarko Natur Parkeko larre-diagnostikoari buruz, Sentinel-2 teledetekzioa, GAM bidezko klima-modelizazioa eta LPIaren laukoitz triangulazioa erabiliz. UPV/EHU 2026.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
   <div class="container">
+    <div class="lang-switch" role="group" aria-label="Hizkuntza / Idioma / Language">
+      <button class="lang-btn" data-lang="eu">EUS</button>
+      <button class="lang-btn" data-lang="es">CAS</button>
+      <button class="lang-btn" data-lang="en">ENG</button>
+    </div>
     <div class="brand">
-      <h1>TFG Aralar</h1>
-      <p class="subtitle">Diagnóstico pastoral del Parque Natural de Aralar mediante teledetección y modelización climática</p>
-      <p class="meta">Grado en Geografía y Ordenación del Territorio · UPV/EHU · 2026 · LIFE Oreka Mendian</p>
+      <h1 data-i18n="brand">Aralar GrAL</h1>
+      <p class="subtitle" data-i18n="subtitle">Aralarko Natur Parkeko larre-diagnostikoa teledetekzioz eta klima-modelizazioz</p>
+      <p class="meta" data-i18n="headerMeta">Geografia eta Lurralde Antolakuntzako Gradua · UPV/EHU · 2026 · LIFE Oreka Mendian</p>
     </div>
     <nav>
-      <a href="#resumen">Resumen</a>
-      <a href="#metodo">Metodología</a>
-      <a href="#mapas">Mapas</a>
-      <a href="#graficos">Gráficos</a>
-      <a href="#documentos">Documentos</a>
-      <a href="#repositorio">Repositorio</a>
+      <a href="#resumen" data-i18n="nav_resumen">Laburpena</a>
+      <a href="#metodo" data-i18n="nav_metodo">Metodologia</a>
+      <a href="#mapas" data-i18n="nav_mapas">Mapak</a>
+      <a href="#graficos" data-i18n="nav_graficos">Grafikoak</a>
+      <a href="#documentos" data-i18n="nav_docs">Dokumentuak</a>
+      <a href="#repositorio" data-i18n="nav_repo">Biltegia</a>
     </nav>
   </div>
 </header>
@@ -31,17 +36,17 @@
 
 <section id="resumen" class="hero">
   <div class="container">
-    <h2>El proyecto en una mirada</h2>
+    <h2 data-i18n="hero_h2">Proiektua begirada batean</h2>
     <div class="hero-grid">
       <div class="hero-text">
-        <p class="lead">¿Cuánto del LAI deficiente del pasto subalpino atlántico de Aralar es atribuible al pastoreo y cuánto al clima? Este TFG construye un sistema de diagnóstico pastoral usando series Sentinel-2 invertidas con PROSAIL, modelización climática con GAM y <strong>cuatro estrategias del IPP</strong> que se trianguian para producir un diagnóstico robusto.</p>
-        <p>Aplicado al ZEC ES2120011 Parque Natural de Aralar entre 2018 y 2025, el sistema revela un <strong>patrón cuasi-bianual</strong> de presión pastoral: crisis en 2020, 2022 y 2025, alternadas con relajación en 2023.</p>
+        <p class="lead" data-i18n="hero_lead">Aralarko mendi-pean atlantikoko larreen LAI eskasaren zenbat da abeltzaintzari egotzgarria eta zenbat klimari? GrAL honek larre-diagnostikorako sistema bat eraikitzen du, PROSAILekin alderantzikatutako Sentinel-2 serieak, GAM bidezko klima-modelizazioa eta <strong>LPIaren lau estrategia</strong> erabiliz, diagnostiko sendoa lortzeko triangulatzen direnak.</p>
+        <p data-i18n="hero_p2">ES2120011 KBE Aralarko Natur Parkean 2018tik 2025era aplikatuta, sistemak larre-presioaren <strong>ia bi urteko eredu</strong> bat agerian uzten du: krisia 2020, 2022 eta 2025ean, 2023ko lasaitzearekin txandakatuta.</p>
       </div>
       <div class="stats">
-        <div class="stat"><div class="stat-num">8</div><div class="stat-label">años de serie temporal</div></div>
-        <div class="stat"><div class="stat-num">4</div><div class="stat-label">estrategias del IPP</div></div>
-        <div class="stat"><div class="stat-num">0.91</div><div class="stat-label">r medio LOYO</div></div>
-        <div class="stat"><div class="stat-num">96</div><div class="stat-label">mapas generados</div></div>
+        <div class="stat"><div class="stat-num">8</div><div class="stat-label" data-i18n="stat_1">urteko denbora-seriea</div></div>
+        <div class="stat"><div class="stat-num">4</div><div class="stat-label" data-i18n="stat_2">LPIaren estrategiak</div></div>
+        <div class="stat"><div class="stat-num">0.91</div><div class="stat-label" data-i18n="stat_3">LOYO batez besteko r</div></div>
+        <div class="stat"><div class="stat-num">96</div><div class="stat-label" data-i18n="stat_4">sortutako mapak</div></div>
       </div>
     </div>
   </div>
@@ -49,127 +54,127 @@
 
 <section id="metodo">
   <div class="container">
-    <h2>Metodología por triangulación</h2>
-    <p class="intro">El diagnóstico se construye combinando cuatro estrategias metodológicamente independientes. Cada una responde a la misma pregunta desde un ángulo distinto, y la convergencia de signo entre ellas es el criterio operativo de robustez.</p>
+    <h2 data-i18n="metodo_h2">Triangulazio bidezko metodologia</h2>
+    <p class="intro" data-i18n="metodo_intro">Diagnostikoa metodologikoki independenteak diren lau estrategia konbinatuz eraikitzen da. Bakoitzak galdera berari erantzuten dio ikuspegi desberdin batetik, eta haien arteko zeinu-bateragarritasuna da sendotasunaren irizpide operatiboa.</p>
     <div class="strategies">
       <div class="strategy strategy-A">
-        <h3>A · GAM climático</h3>
-        <p>Modelo G6 ajustado sobre el LAI agregado del AOI. El residuo (observado − predicho) es la señal pastoral.</p>
-        <div class="formula">IPP_A = (LAI_obs − LAI_G6) / LAI_obs</div>
+        <h3 data-i18n="strat_A_h3">A · Klima-GAM</h3>
+        <p data-i18n="strat_A_p">AOIaren LAI agregatuaren gainean doitutako G6 eredua. Hondarra (behatua − iragarria) da larre-seinalea.</p>
+        <div class="formula" data-i18n="strat_A_f">LPI_A = (LAI_obs − LAI_G6) / LAI_obs</div>
       </div>
       <div class="strategy strategy-B">
-        <h3>B · Pseudo-referencia</h3>
-        <p>Modelo entrenado solo con zonas de pasto remoto (referencia interna menos pastoreada). Anomalía respecto a esa referencia.</p>
-        <div class="formula">IPP_B = anomalía vs ref. interna</div>
+        <h3 data-i18n="strat_B_h3">B · Pseudo-erreferentzia</h3>
+        <p data-i18n="strat_B_p">Larre urruneko guneekin soilik entrenatutako eredua (gutxien larratzen den barneko erreferentzia). Erreferentzia horrekiko anomalia.</p>
+        <div class="formula" data-i18n="strat_B_f">LPI_B = anomalia vs barne-erref.</div>
       </div>
       <div class="strategy strategy-C">
-        <h3>C · Anomalía espacial</h3>
-        <p>Comparación con la mediana del AOI en cada fecha. No necesita modelo ni referencia, foto instantánea.</p>
-        <div class="formula">IPP_C = (LAI − mediana) / mediana</div>
+        <h3 data-i18n="strat_C_h3">C · Anomalia espaziala</h3>
+        <p data-i18n="strat_C_p">AOIaren medianarekin alderatzea data bakoitzean. Ez du eredurik ez erreferentziarik behar, argazki bat.</p>
+        <div class="formula" data-i18n="strat_C_f">LPI_C = (LAI − mediana) / mediana</div>
       </div>
       <div class="strategy strategy-D">
-        <h3>D · Referencia hayedo</h3>
-        <p>El hayedo como termómetro climático. Diferencia de anomalías respecto a las fenologías propias multianuales.</p>
-        <div class="formula">IPP_D = anom_pasto − anom_hayedo</div>
+        <h3 data-i18n="strat_D_h3">D · Pagadi-erreferentzia</h3>
+        <p data-i18n="strat_D_p">Pagadia klima-termometro gisa. Anomalia-aldea urte anitzeko fenologia propioekiko.</p>
+        <div class="formula" data-i18n="strat_D_f">LPI_D = anom_larrea − anom_pagadia</div>
       </div>
     </div>
     <div class="figure">
-      <img src="figures/IPP_triangulacion_ABCD.png" alt="Triangulación de las cuatro estrategias del IPP">
-      <p class="caption">Triangulación cuádruple del IPP: cada estrategia cubre la limitación de las demás. La convergencia de signo es el criterio de robustez.</p>
+      <img src="figures/IPP_triangulacion_ABCD.png" alt="LPIaren lau estrategien triangulazioa">
+      <p class="caption" data-i18n="tri_caption">LPIaren laukoitz triangulazioa: estrategia bakoitzak besteen muga betetzen du. Zeinu-bateragarritasuna da sendotasun-irizpidea.</p>
     </div>
   </div>
 </section>
 
 <section id="mapas" class="alt">
   <div class="container">
-    <h2>Galería de mapas pastorales</h2>
-    <p class="intro">13 productos cartográficos por año para la serie 2018-2025. Selecciona año y producto para visualizar el mapa correspondiente.</p>
+    <h2 data-i18n="mapas_h2">Larre-mapen galeria</h2>
+    <p class="intro" data-i18n="mapas_intro">12 produktu kartografiko urteko, 2018-2025 seriearentzat. Hautatu urtea eta produktua dagokion mapa ikusteko.</p>
 
     <div class="map-controls">
       <div class="control">
-        <label for="year-select">Año</label>
+        <label for="year-select" data-i18n="label_year">Urtea</label>
         <select id="year-select">
-          <option value="2018">2018 (transición)</option>
-          <option value="2019">2019 (equilibrio)</option>
-          <option value="2020" class="crisis">2020 (CRISIS FUERTE)</option>
-          <option value="2021">2021 (transición)</option>
-          <option value="2022" selected class="crisis">2022 (CRISIS)</option>
-          <option value="2023" class="relax">2023 (RELAJACIÓN)</option>
-          <option value="2024">2024 (mixto)</option>
-          <option value="2025" class="crisis">2025 (CRISIS moderada)</option>
+          <option value="2018">2018 (trantsizioa)</option>
+          <option value="2019">2019 (oreka)</option>
+          <option value="2020" class="crisis">2020 (KRISI GOGORRA)</option>
+          <option value="2021">2021 (trantsizioa)</option>
+          <option value="2022" selected class="crisis">2022 (KRISIA)</option>
+          <option value="2023" class="relax">2023 (LASAITZEA)</option>
+          <option value="2024">2024 (mistoa)</option>
+          <option value="2025" class="crisis">2025 (KRISI moderatua)</option>
         </select>
       </div>
       <div class="control">
-        <label for="product-select">Producto</label>
+        <label for="product-select" data-i18n="label_product">Produktua</label>
         <select id="product-select">
-          <option value="ipp_consenso" selected>IPP consenso integrado</option>
-          <option value="ipp_a">IPP A — GAM climático</option>
-          <option value="ipp_b">IPP B — Pseudo-referencia</option>
-          <option value="ipp_c">IPP C — Anomalía espacial</option>
-          <option value="ipp_espacializado">IPP espacializado (píxel)</option>
-          <option value="concordancia">Mapa de concordancia (k/n)</option>
-          <option value="biomasa">Biomasa estimada (kg/ha)</option>
-          <option value="calidad">Calidad forrajera</option>
-          <option value="carga">Carga admisible (UGM/ha)</option>
-          <option value="balance">Balance forrajero</option>
-          <option value="riesgo">Riesgo de degradación</option>
-          <option value="pendiente">Pendiente (control)</option>
+          <option value="ipp_consenso" selected>LPI adostasun integratua</option>
+          <option value="ipp_a">LPI A — Klima-GAM</option>
+          <option value="ipp_b">LPI B — Pseudo-erreferentzia</option>
+          <option value="ipp_c">LPI C — Anomalia espaziala</option>
+          <option value="ipp_espacializado">LPI espazializatua (pixela)</option>
+          <option value="concordancia">Bateragarritasun-mapa pixelez pixel</option>
+          <option value="biomasa">Estimatutako biomasa (kg/ha)</option>
+          <option value="calidad">Larre-kalitatea</option>
+          <option value="carga">Onar daitekeen karga (ALU/ha)</option>
+          <option value="balance">Larre-balantzea</option>
+          <option value="riesgo">Degradazio-arriskua</option>
+          <option value="pendiente">Malda (kontrol-aldagaia)</option>
         </select>
       </div>
     </div>
 
     <div class="map-display">
-      <img id="map-image" src="maps/2022/aralar_mapa_IPP_consenso_pastos_2022.png" alt="Mapa pastoral">
-      <p class="caption" id="map-caption">IPP consenso integrado — 2022 (año de crisis pastoral severa, concordancia 4/4)</p>
+      <img id="map-image" src="maps/2022/aralar_mapa_IPP_consenso_pastos_2022.png" alt="Larre-mapa">
+      <p class="caption" id="map-caption"></p>
     </div>
   </div>
 </section>
 
 <section id="graficos">
   <div class="container">
-    <h2>Síntesis gráfica de resultados</h2>
-    <p class="intro">Galería completa generada automáticamente a partir del contenido de la carpeta <code>figures/</code> del repositorio. Cada nueva figura que se añada aparece aquí sin tocar la página.</p>
+    <h2 data-i18n="graficos_h2">Emaitzen sintesi grafikoa</h2>
+    <p class="intro" data-i18n="graficos_intro">Biltegiko <code>figures/</code> karpetaren edukitik automatikoki sortutako galeria osoa. Gehitzen den irudi berri bakoitza hemen agertzen da orria ukitu gabe.</p>
     <div class="chart-grid" id="charts-grid">
-      <p class="docs-status" id="charts-status">Cargando figuras…</p>
+      <p class="docs-status" id="charts-status">Irudiak kargatzen…</p>
     </div>
   </div>
 </section>
 
 <section id="documentos" class="alt">
   <div class="container">
-    <h2>Documentos del proyecto</h2>
-    <p class="intro">Listado generado automáticamente a partir del contenido de la carpeta <code>docs/</code> del repositorio. Cada vez que se añada un nuevo archivo aparecerá aquí sin tocar la página.</p>
+    <h2 data-i18n="docs_h2">Proiektuaren dokumentuak</h2>
+    <p class="intro" data-i18n="docs_intro">Biltegiko <code>docs/</code> karpetaren edukitik automatikoki sortutako zerrenda. Fitxategi berri bat gehitzen den bakoitzean hemen agertuko da orria ukitu gabe.</p>
     <div class="docs-grid" id="docs-grid">
-      <p class="docs-status" id="docs-status">Cargando documentos…</p>
+      <p class="docs-status" id="docs-status">Dokumentuak kargatzen…</p>
     </div>
   </div>
 </section>
 
 <section id="repositorio">
   <div class="container">
-    <h2>Repositorio y reproducibilidad</h2>
-    <p class="intro">Todo el código fuente del pipeline está disponible en GitHub bajo licencia Creative Commons BY-NC-ND 4.0. Esto permite la consulta, citación y reproducción del trabajo, pero no su uso comercial ni la distribución de derivados modificados.</p>
+    <h2 data-i18n="repo_h2">Biltegia eta erreproduzigarritasuna</h2>
+    <p class="intro" data-i18n="repo_intro">Pipeline-aren iturburu-kode osoa GitHuben dago eskuragarri, Creative Commons BY-NC-ND 4.0 lizentziapean. Horrek lanaren kontsulta, aipamena eta erreprodukzioa ahalbidetzen du, baina ez erabilera komertziala ezta eratorritako bertsio aldatuen banaketa ere.</p>
 
     <div class="repo-card">
       <h3>📦 github.com/Moxkix/ARALAR_TFG</h3>
       <ul class="repo-list">
-        <li><code>scripts/python/</code> — Inversión PROSAIL local + entrenamiento NN + cartografía</li>
-        <li><code>scripts/javascript/</code> — Pipeline GEE completo</li>
-        <li><code>scripts/R/</code> — Modelización climática y diagnóstico cuádruple</li>
-        <li><code>data/</code> — CSVs de salida del pipeline</li>
-        <li><code>maps/</code> — Cartografía pastoral por año (serie 2018-2025, 13 productos × 8 años)</li>
-        <li><code>figures/</code> — Figuras de síntesis del diagnóstico</li>
-        <li><code>docs/</code> — Documentación del proyecto (listada automáticamente en la web)</li>
+        <li data-i18n="repo_li_1"><code>scripts/python/</code> — PROSAIL inbertsio lokala + NN entrenamendua + kartografia</li>
+        <li data-i18n="repo_li_2"><code>scripts/javascript/</code> — GEE pipeline osoa</li>
+        <li data-i18n="repo_li_3"><code>scripts/R/</code> — Klima-modelizazioa eta laukoitz diagnostikoa</li>
+        <li data-i18n="repo_li_4"><code>data/</code> — Pipeline-aren irteerako CSVak</li>
+        <li data-i18n="repo_li_5"><code>maps/</code> — Urteko larre-kartografia (2018-2025 seriea, 12 produktu × 8 urte)</li>
+        <li data-i18n="repo_li_6"><code>figures/</code> — Diagnostikoaren sintesi-irudiak</li>
+        <li data-i18n="repo_li_7"><code>docs/</code> — Proiektuaren dokumentazioa (weben automatikoki zerrendatua)</li>
       </ul>
-      <a href="https://github.com/Moxkix/ARALAR_TFG" class="btn">Ver código fuente completo →</a>
+      <a href="https://github.com/Moxkix/ARALAR_TFG" class="btn" data-i18n="repo_btn">Ikusi iturburu-kode osoa →</a>
     </div>
 
     <div class="cite-box">
-      <h3>Citación sugerida</h3>
-      <pre>[Apellido, Nombre] (2026). Diagnóstico pastoral del Parque Natural
-de Aralar mediante teledetección y modelización climática. Trabajo
-de Fin de Grado, Grado en Geografía y Ordenación del Territorio,
-Universidad del País Vasco / Euskal Herriko Unibertsitatea.
+      <h3 data-i18n="cite_h3">Aipamen iradokia</h3>
+      <pre data-i18n="cite_pre">[Abizena, Izena] (2026). Aralarko Natur Parkeko larre-diagnostikoa
+teledetekzioz eta klima-modelizazioz. Gradu Amaierako Lana, Geografia
+eta Lurralde Antolakuntzako Gradua, Euskal Herriko Unibertsitatea
+/ Universidad del País Vasco.
 https://github.com/Moxkix/ARALAR_TFG</pre>
     </div>
   </div>
@@ -181,62 +186,346 @@ https://github.com/Moxkix/ARALAR_TFG</pre>
   <div class="container">
     <div class="footer-grid">
       <div>
-        <h4>Sobre el proyecto</h4>
-        <p>Trabajo de Fin de Grado en Geografía y Ordenación del Territorio (UPV/EHU). Desarrollado en el marco del proyecto LIFE Oreka Mendian (LIFE15 NAT/ES/000762).</p>
+        <h4 data-i18n="foot_about_h4">Proiektuari buruz</h4>
+        <p data-i18n="foot_about_p">Geografia eta Lurralde Antolakuntzako Gradu Amaierako Lana (UPV/EHU). LIFE Oreka Mendian proiektuaren baitan garatua (LIFE15 NAT/ES/000762).</p>
       </div>
       <div>
-        <h4>Agradecimientos</h4>
+        <h4 data-i18n="foot_thanks_h4">Esker onak</h4>
         <ul class="footer-list">
-          <li>HAZI Fundazioa — coordinación LIFE</li>
-          <li>Diputación Foral de Guipúzcoa — cartografía HIC</li>
-          <li>Gobierno de Navarra — datos meteorológicos</li>
-          <li>GeoEuskadi — MDT5</li>
+          <li data-i18n="foot_thanks_1">HAZI Fundazioa — LIFE koordinazioa</li>
+          <li data-i18n="foot_thanks_2">Gipuzkoako Foru Aldundia — HIC kartografia</li>
+          <li data-i18n="foot_thanks_3">Nafarroako Gobernua — datu meteorologikoak</li>
+          <li data-i18n="foot_thanks_4">GeoEuskadi — MDT5</li>
           <li>ESA / Copernicus — Sentinel-2, ERA5-Land</li>
           <li>Google Earth Engine</li>
         </ul>
       </div>
       <div>
-        <h4>Licencia</h4>
-        <p>Este trabajo y todo su contenido se publican bajo licencia <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">Creative Commons Atribución-NoComercial-SinDerivadas 4.0 Internacional</a>.</p>
+        <h4 data-i18n="foot_lic_h4">Lizentzia</h4>
+        <p data-i18n="foot_lic_p">Lan hau eta bere eduki guztia <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.eu">Creative Commons Aitortu-EzKomertziala-LanEratorririkGabe 4.0 Internazionala</a> lizentziapean argitaratzen dira.</p>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 TFG Aralar · UPV/EHU · Web realizada con HTML/CSS estático sobre GitHub Pages</p>
+      <p data-i18n="foot_bottom">© 2026 Aralar GrAL · UPV/EHU · HTML/CSS estatikoz egindako weba GitHub Pages gainean</p>
     </div>
   </div>
 </footer>
 
 <script>
+/* ═══════════════════ i18n: hiztegi elebanitza / diccionario / dictionary ═══════════════════ */
+const I18N = {
+  eu: {
+    ui: {
+      docTitle: 'Aralar GrAL · Larre-diagnostikoa teledetekzioz',
+      metaDesc: 'Gradu Amaierako Lana Aralarko Natur Parkeko larre-diagnostikoari buruz, Sentinel-2 teledetekzioa, GAM bidezko klima-modelizazioa eta LPIaren laukoitz triangulazioa erabiliz. UPV/EHU 2026.',
+      brand: 'Aralar GrAL',
+      subtitle: 'Aralarko Natur Parkeko larre-diagnostikoa teledetekzioz eta klima-modelizazioz',
+      headerMeta: 'Geografia eta Lurralde Antolakuntzako Gradua · UPV/EHU · 2026 · LIFE Oreka Mendian',
+      nav_resumen: 'Laburpena', nav_metodo: 'Metodologia', nav_mapas: 'Mapak', nav_graficos: 'Grafikoak', nav_docs: 'Dokumentuak', nav_repo: 'Biltegia',
+      hero_h2: 'Proiektua begirada batean',
+      hero_lead: 'Aralarko mendi-pean atlantikoko larreen LAI eskasaren zenbat da abeltzaintzari egotzgarria eta zenbat klimari? GrAL honek larre-diagnostikorako sistema bat eraikitzen du, PROSAILekin alderantzikatutako Sentinel-2 serieak, GAM bidezko klima-modelizazioa eta <strong>LPIaren lau estrategia</strong> erabiliz, diagnostiko sendoa lortzeko triangulatzen direnak.',
+      hero_p2: 'ES2120011 KBE Aralarko Natur Parkean 2018tik 2025era aplikatuta, sistemak larre-presioaren <strong>ia bi urteko eredu</strong> bat agerian uzten du: krisia 2020, 2022 eta 2025ean, 2023ko lasaitzearekin txandakatuta.',
+      stat_1: 'urteko denbora-seriea', stat_2: 'LPIaren estrategiak', stat_3: 'LOYO batez besteko r', stat_4: 'sortutako mapak',
+      metodo_h2: 'Triangulazio bidezko metodologia',
+      metodo_intro: 'Diagnostikoa metodologikoki independenteak diren lau estrategia konbinatuz eraikitzen da. Bakoitzak galdera berari erantzuten dio ikuspegi desberdin batetik, eta haien arteko zeinu-bateragarritasuna da sendotasunaren irizpide operatiboa.',
+      strat_A_h3: 'A · Klima-GAM',
+      strat_A_p: 'AOIaren LAI agregatuaren gainean doitutako G6 eredua. Hondarra (behatua − iragarria) da larre-seinalea.',
+      strat_A_f: 'LPI_A = (LAI_obs − LAI_G6) / LAI_obs',
+      strat_B_h3: 'B · Pseudo-erreferentzia',
+      strat_B_p: 'Larre urruneko guneekin soilik entrenatutako eredua (gutxien larratzen den barneko erreferentzia). Erreferentzia horrekiko anomalia.',
+      strat_B_f: 'LPI_B = anomalia vs barne-erref.',
+      strat_C_h3: 'C · Anomalia espaziala',
+      strat_C_p: 'AOIaren medianarekin alderatzea data bakoitzean. Ez du eredurik ez erreferentziarik behar, argazki bat.',
+      strat_C_f: 'LPI_C = (LAI − mediana) / mediana',
+      strat_D_h3: 'D · Pagadi-erreferentzia',
+      strat_D_p: 'Pagadia klima-termometro gisa. Anomalia-aldea urte anitzeko fenologia propioekiko.',
+      strat_D_f: 'LPI_D = anom_larrea − anom_pagadia',
+      tri_caption: 'LPIaren laukoitz triangulazioa: estrategia bakoitzak besteen muga betetzen du. Zeinu-bateragarritasuna da sendotasun-irizpidea.',
+      mapas_h2: 'Larre-mapen galeria',
+      mapas_intro: '12 produktu kartografiko urteko, 2018-2025 seriearentzat. Hautatu urtea eta produktua dagokion mapa ikusteko.',
+      label_year: 'Urtea', label_product: 'Produktua',
+      graficos_h2: 'Emaitzen sintesi grafikoa',
+      graficos_intro: 'Biltegiko <code>figures/</code> karpetaren edukitik automatikoki sortutako galeria osoa. Gehitzen den irudi berri bakoitza hemen agertzen da orria ukitu gabe.',
+      docs_h2: 'Proiektuaren dokumentuak',
+      docs_intro: 'Biltegiko <code>docs/</code> karpetaren edukitik automatikoki sortutako zerrenda. Fitxategi berri bat gehitzen den bakoitzean hemen agertuko da orria ukitu gabe.',
+      repo_h2: 'Biltegia eta erreproduzigarritasuna',
+      repo_intro: 'Pipeline-aren iturburu-kode osoa GitHuben dago eskuragarri, Creative Commons BY-NC-ND 4.0 lizentziapean. Horrek lanaren kontsulta, aipamena eta erreprodukzioa ahalbidetzen du, baina ez erabilera komertziala ezta eratorritako bertsio aldatuen banaketa ere.',
+      repo_li_1: '<code>scripts/python/</code> — PROSAIL inbertsio lokala + NN entrenamendua + kartografia',
+      repo_li_2: '<code>scripts/javascript/</code> — GEE pipeline osoa',
+      repo_li_3: '<code>scripts/R/</code> — Klima-modelizazioa eta laukoitz diagnostikoa',
+      repo_li_4: '<code>data/</code> — Pipeline-aren irteerako CSVak',
+      repo_li_5: '<code>maps/</code> — Urteko larre-kartografia (2018-2025 seriea, 12 produktu × 8 urte)',
+      repo_li_6: '<code>figures/</code> — Diagnostikoaren sintesi-irudiak',
+      repo_li_7: '<code>docs/</code> — Proiektuaren dokumentazioa (weben automatikoki zerrendatua)',
+      repo_btn: 'Ikusi iturburu-kode osoa →',
+      cite_h3: 'Aipamen iradokia',
+      cite_pre: '[Abizena, Izena] (2026). Aralarko Natur Parkeko larre-diagnostikoa\nteledetekzioz eta klima-modelizazioz. Gradu Amaierako Lana, Geografia\neta Lurralde Antolakuntzako Gradua, Euskal Herriko Unibertsitatea\n/ Universidad del País Vasco.\nhttps://github.com/Moxkix/ARALAR_TFG',
+      foot_about_h4: 'Proiektuari buruz',
+      foot_about_p: 'Geografia eta Lurralde Antolakuntzako Gradu Amaierako Lana (UPV/EHU). LIFE Oreka Mendian proiektuaren baitan garatua (LIFE15 NAT/ES/000762).',
+      foot_thanks_h4: 'Esker onak',
+      foot_thanks_1: 'HAZI Fundazioa — LIFE koordinazioa',
+      foot_thanks_2: 'Gipuzkoako Foru Aldundia — HIC kartografia',
+      foot_thanks_3: 'Nafarroako Gobernua — datu meteorologikoak',
+      foot_thanks_4: 'GeoEuskadi — MDT5',
+      foot_lic_h4: 'Lizentzia',
+      foot_lic_p: 'Lan hau eta bere eduki guztia <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.eu">Creative Commons Aitortu-EzKomertziala-LanEratorririkGabe 4.0 Internazionala</a> lizentziapean argitaratzen dira.',
+      foot_bottom: '© 2026 Aralar GrAL · UPV/EHU · HTML/CSS estatikoz egindako weba GitHub Pages gainean'
+    },
+    yearOpt: {
+      2018: '2018 (trantsizioa)', 2019: '2019 (oreka)', 2020: '2020 (KRISI GOGORRA)', 2021: '2021 (trantsizioa)',
+      2022: '2022 (KRISIA)', 2023: '2023 (LASAITZEA)', 2024: '2024 (mistoa)', 2025: '2025 (KRISI moderatua)'
+    },
+    years: {
+      2018: 'trantsizioa', 2019: 'oreka', 2020: 'larre-krisi larriko urtea, 4/4 bateragarritasuna',
+      2021: 'presiorako trantsizio arina', 2022: 'larre-krisi larriko urtea, 4/4 bateragarritasuna',
+      2023: 'larre-lasaitze orokortuko urtea, 4/4 bateragarritasuna', 2024: 'eredu mistoa, 3/4 bateragarritasuna behaketa-fidagarritasunagatik',
+      2025: 'krisi moderatuko urtea, 4/4 bateragarritasuna'
+    },
+    products: {
+      ipp_consenso: 'LPI adostasun integratua', ipp_a: 'LPI A — Klima-GAM', ipp_b: 'LPI B — Pseudo-erreferentzia',
+      ipp_c: 'LPI C — Anomalia espaziala', ipp_espacializado: 'LPI espazializatua (pixela)', concordancia: 'Bateragarritasun-mapa pixelez pixel',
+      biomasa: 'Estimatutako biomasa (kg/ha)', calidad: 'Larre-kalitatea', carga: 'Onar daitekeen karga (ALU/ha)',
+      balance: 'Larre-balantzea', riesgo: 'Degradazio-arriskua', pendiente: 'Malda (kontrol-aldagaia)'
+    },
+    mapAlt: 'Larre-mapa',
+    status: {
+      docsLoading: 'Dokumentuak kargatzen…',
+      docs404: 'Oraindik ez da dokumenturik argitaratu. Biltegiko docs/ karpetara fitxategiak igotzean hemen agertuko dira automatikoki.',
+      docsEmpty: 'docs/ karpeta hutsik dago. Igo fitxategiak biltegira hemen ager daitezen.',
+      docsError: 'Ezin izan da GitHubetik dokumentuen zerrenda kargatu.',
+      fileWord: 'fitxategia',
+      chartsLoading: 'Irudiak kargatzen…',
+      chartsEmpty: 'Oraindik ez da irudirik argitaratu figures/ karpetan.',
+      chartsError: 'Ezin izan da GitHubetik irudien zerrenda kargatu.'
+    },
+    figures: {
+      'N1_series_LAI.png': { title: 'Zonakako LAI serie sasoikoa (PROSAIL-NN)', desc: 'Hosto-azaleraren indizearen (LAI) bilakaera urteko egunaren eta zonaren arabera, Sentinel-2tik PROSAIL-NNrekin alderantzikatua (2018-2025). Pagadiaren estalkia eta larrea bordetatik distantzia desberdinetara alderatzen ditu.' },
+      'evolucion_IPP_interanual.png': { title: 'LPIaren urtez urteko bilakaera', desc: 'LPI adostasunaren 2018-2025 seriea. Ia bi urteko eredua: krisia 2020, 2022 eta 2025ean, 2023ko lasaitzearekin txandakatuta.' },
+      'IPP_barras_interanual.png': { title: 'LPIa urteka (barra-sintesia)', desc: 'LPIaren urteko laburpena estrategiaka. Larre-presioaren magnitudea urteen artean eta lau estrategien arteko koherentzia alderatzeko aukera ematen du.' },
+      'IPP_por_habitat.png': { title: 'LPIa habitataka', desc: 'LPIaren banaketa habitat-motaren arabera (HIC). Zein larre-motak jasaten duten presio handiena identifikatzen du.' },
+      'gradiente_IPP_distancia_bordas.png': { title: 'Gradiente espaziala bordetarako distantziaren arabera', desc: 'Larre hurbila > ertaina > urruna. Abere-aztarnarekin bat datorren zeinu espaziala, klima-eredutik independentea.' },
+      'diag_A_pasto_cercano.png': { title: 'A estrategia · larre hurbila', desc: 'Bordetatik hurbil dagoen larrearen LAI anomaliak G6 klima-ereduarekiko.' },
+      'diag_A_pasto_intermedio.png': { title: 'A estrategia · larre ertaina', desc: 'Erdialdeko larrearen LAI anomaliak G6 klima-ereduarekiko.' },
+      'diag_A_pasto_remoto.png': { title: 'A estrategia · larre urruna', desc: 'Larre urruna: B estrategian ere erabiltzen den barneko pseudo-erreferentzia.' },
+      'diag_A_hayedo_cercano.png': { title: 'A estrategia · pagadi hurbila', desc: 'Hurbileko pagadiaren LAI anomaliak klima-ereduarekiko.' },
+      'diag_A_hayedo_intermedio.png': { title: 'A estrategia · pagadi ertaina', desc: 'Erdialdeko pagadiaren LAI anomaliak klima-ereduarekiko.' },
+      'diag_A_hayedo_remoto.png': { title: 'A estrategia · pagadi urruna', desc: 'Pagadi urruna: D estrategia egituratzen duen klima-termometroa.' },
+      'diag_C_anomalias.png': { title: 'C estrategia · anomalia espaziala', desc: 'Pixelez pixel AOIaren medianarekin alderatzea data bakoitzean. Ez du eredurik ez kanpoko erreferentziarik behar.' },
+      'diagnostico_integrado_global.png': { title: 'Diagnostiko integratu orokorra', desc: 'Laukoitz diagnostikoaren azken sintesia: estrategien arteko bateragarritasuna, LPIaren zeinua urteka eta fidagarritasun-maila.' }
+    }
+  },
+
+  es: {
+    ui: {
+      docTitle: 'TFG Aralar · Diagnóstico pastoral por teledetección',
+      metaDesc: 'Trabajo de Fin de Grado sobre el diagnóstico pastoral del Parque Natural de Aralar mediante teledetección Sentinel-2, modelización climática con GAM y triangulación cuádruple del IPP. UPV/EHU 2026.',
+      brand: 'TFG Aralar',
+      subtitle: 'Diagnóstico pastoral del Parque Natural de Aralar mediante teledetección y modelización climática',
+      headerMeta: 'Grado en Geografía y Ordenación del Territorio · UPV/EHU · 2026 · LIFE Oreka Mendian',
+      nav_resumen: 'Resumen', nav_metodo: 'Metodología', nav_mapas: 'Mapas', nav_graficos: 'Gráficos', nav_docs: 'Documentos', nav_repo: 'Repositorio',
+      hero_h2: 'El proyecto en una mirada',
+      hero_lead: '¿Cuánto del LAI deficiente del pasto subalpino atlántico de Aralar es atribuible al pastoreo y cuánto al clima? Este TFG construye un sistema de diagnóstico pastoral usando series Sentinel-2 invertidas con PROSAIL, modelización climática con GAM y <strong>cuatro estrategias del IPP</strong> que se triangulan para producir un diagnóstico robusto.',
+      hero_p2: 'Aplicado al ZEC ES2120011 Parque Natural de Aralar entre 2018 y 2025, el sistema revela un <strong>patrón cuasi-bianual</strong> de presión pastoral: crisis en 2020, 2022 y 2025, alternadas con relajación en 2023.',
+      stat_1: 'años de serie temporal', stat_2: 'estrategias del IPP', stat_3: 'r medio LOYO', stat_4: 'mapas generados',
+      metodo_h2: 'Metodología por triangulación',
+      metodo_intro: 'El diagnóstico se construye combinando cuatro estrategias metodológicamente independientes. Cada una responde a la misma pregunta desde un ángulo distinto, y la convergencia de signo entre ellas es el criterio operativo de robustez.',
+      strat_A_h3: 'A · GAM climático',
+      strat_A_p: 'Modelo G6 ajustado sobre el LAI agregado del AOI. El residuo (observado − predicho) es la señal pastoral.',
+      strat_A_f: 'IPP_A = (LAI_obs − LAI_G6) / LAI_obs',
+      strat_B_h3: 'B · Pseudo-referencia',
+      strat_B_p: 'Modelo entrenado solo con zonas de pasto remoto (referencia interna menos pastoreada). Anomalía respecto a esa referencia.',
+      strat_B_f: 'IPP_B = anomalía vs ref. interna',
+      strat_C_h3: 'C · Anomalía espacial',
+      strat_C_p: 'Comparación con la mediana del AOI en cada fecha. No necesita modelo ni referencia, foto instantánea.',
+      strat_C_f: 'IPP_C = (LAI − mediana) / mediana',
+      strat_D_h3: 'D · Referencia hayedo',
+      strat_D_p: 'El hayedo como termómetro climático. Diferencia de anomalías respecto a las fenologías propias multianuales.',
+      strat_D_f: 'IPP_D = anom_pasto − anom_hayedo',
+      tri_caption: 'Triangulación cuádruple del IPP: cada estrategia cubre la limitación de las demás. La convergencia de signo es el criterio de robustez.',
+      mapas_h2: 'Galería de mapas pastorales',
+      mapas_intro: '12 productos cartográficos por año para la serie 2018-2025. Selecciona año y producto para visualizar el mapa correspondiente.',
+      label_year: 'Año', label_product: 'Producto',
+      graficos_h2: 'Síntesis gráfica de resultados',
+      graficos_intro: 'Galería completa generada automáticamente a partir del contenido de la carpeta <code>figures/</code> del repositorio. Cada nueva figura que se añada aparece aquí sin tocar la página.',
+      docs_h2: 'Documentos del proyecto',
+      docs_intro: 'Listado generado automáticamente a partir del contenido de la carpeta <code>docs/</code> del repositorio. Cada vez que se añada un nuevo archivo aparecerá aquí sin tocar la página.',
+      repo_h2: 'Repositorio y reproducibilidad',
+      repo_intro: 'Todo el código fuente del pipeline está disponible en GitHub bajo licencia Creative Commons BY-NC-ND 4.0. Esto permite la consulta, citación y reproducción del trabajo, pero no su uso comercial ni la distribución de derivados modificados.',
+      repo_li_1: '<code>scripts/python/</code> — Inversión PROSAIL local + entrenamiento NN + cartografía',
+      repo_li_2: '<code>scripts/javascript/</code> — Pipeline GEE completo',
+      repo_li_3: '<code>scripts/R/</code> — Modelización climática y diagnóstico cuádruple',
+      repo_li_4: '<code>data/</code> — CSVs de salida del pipeline',
+      repo_li_5: '<code>maps/</code> — Cartografía pastoral por año (serie 2018-2025, 12 productos × 8 años)',
+      repo_li_6: '<code>figures/</code> — Figuras de síntesis del diagnóstico',
+      repo_li_7: '<code>docs/</code> — Documentación del proyecto (listada automáticamente en la web)',
+      repo_btn: 'Ver código fuente completo →',
+      cite_h3: 'Citación sugerida',
+      cite_pre: '[Apellido, Nombre] (2026). Diagnóstico pastoral del Parque Natural\nde Aralar mediante teledetección y modelización climática. Trabajo\nde Fin de Grado, Grado en Geografía y Ordenación del Territorio,\nUniversidad del País Vasco / Euskal Herriko Unibertsitatea.\nhttps://github.com/Moxkix/ARALAR_TFG',
+      foot_about_h4: 'Sobre el proyecto',
+      foot_about_p: 'Trabajo de Fin de Grado en Geografía y Ordenación del Territorio (UPV/EHU). Desarrollado en el marco del proyecto LIFE Oreka Mendian (LIFE15 NAT/ES/000762).',
+      foot_thanks_h4: 'Agradecimientos',
+      foot_thanks_1: 'HAZI Fundazioa — coordinación LIFE',
+      foot_thanks_2: 'Diputación Foral de Guipúzcoa — cartografía HIC',
+      foot_thanks_3: 'Gobierno de Navarra — datos meteorológicos',
+      foot_thanks_4: 'GeoEuskadi — MDT5',
+      foot_lic_h4: 'Licencia',
+      foot_lic_p: 'Este trabajo y todo su contenido se publican bajo licencia <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es">Creative Commons Atribución-NoComercial-SinDerivadas 4.0 Internacional</a>.',
+      foot_bottom: '© 2026 TFG Aralar · UPV/EHU · Web realizada con HTML/CSS estático sobre GitHub Pages'
+    },
+    yearOpt: {
+      2018: '2018 (transición)', 2019: '2019 (equilibrio)', 2020: '2020 (CRISIS FUERTE)', 2021: '2021 (transición)',
+      2022: '2022 (CRISIS)', 2023: '2023 (RELAJACIÓN)', 2024: '2024 (mixto)', 2025: '2025 (CRISIS moderada)'
+    },
+    years: {
+      2018: 'transición', 2019: 'equilibrio', 2020: 'año de crisis pastoral severa, concordancia 4/4',
+      2021: 'transición leve hacia presión', 2022: 'año de crisis pastoral severa, concordancia 4/4',
+      2023: 'año de relajación pastoral generalizada, concordancia 4/4', 2024: 'patrón mixto, concordancia 3/4 por fiabilidad observacional',
+      2025: 'año de crisis moderada, concordancia 4/4'
+    },
+    products: {
+      ipp_consenso: 'IPP consenso integrado', ipp_a: 'IPP A — GAM climático', ipp_b: 'IPP B — Pseudo-referencia',
+      ipp_c: 'IPP C — Anomalía espacial', ipp_espacializado: 'IPP espacializado (píxel)', concordancia: 'Mapa de concordancia píxel a píxel',
+      biomasa: 'Biomasa estimada (kg/ha)', calidad: 'Calidad forrajera', carga: 'Carga admisible (UGM/ha)',
+      balance: 'Balance forrajero', riesgo: 'Riesgo de degradación', pendiente: 'Pendiente (variable de control)'
+    },
+    mapAlt: 'Mapa pastoral',
+    status: {
+      docsLoading: 'Cargando documentos…',
+      docs404: 'Aún no se han publicado documentos. Cuando se suban archivos a la carpeta docs/ del repositorio aparecerán aquí automáticamente.',
+      docsEmpty: 'La carpeta docs/ está vacía. Sube archivos al repositorio para que aparezcan aquí.',
+      docsError: 'No se ha podido cargar el listado de documentos desde GitHub.',
+      fileWord: 'archivo',
+      chartsLoading: 'Cargando figuras…',
+      chartsEmpty: 'Aún no se han publicado figuras en la carpeta figures/.',
+      chartsError: 'No se ha podido cargar el listado de figuras desde GitHub.'
+    },
+    figures: {
+      'N1_series_LAI.png': { title: 'Serie estacional de LAI por zona (PROSAIL-NN)', desc: 'Evolución del índice de área foliar (LAI) por día del año y zona, invertido de Sentinel-2 con PROSAIL-NN (2018-2025). Contrasta el dosel del hayedo (Pagadia) con el pasto (Larrea) a distinta distancia de las bordas.' },
+      'evolucion_IPP_interanual.png': { title: 'Evolución interanual del IPP', desc: 'Serie 2018-2025 del IPP consenso. Patrón cuasi-bianual: crisis en 2020, 2022 y 2025 alternadas con la relajación de 2023.' },
+      'IPP_barras_interanual.png': { title: 'IPP por año (síntesis en barras)', desc: 'Resumen anual del IPP por estrategia. Permite comparar la magnitud de la presión pastoral entre años y la coherencia entre las cuatro estrategias.' },
+      'IPP_por_habitat.png': { title: 'IPP por hábitat', desc: 'Distribución del IPP por tipo de hábitat (HIC). Identifica qué tipos de pasto soportan más presión.' },
+      'gradiente_IPP_distancia_bordas.png': { title: 'Gradiente espacial por distancia a las bordas', desc: 'Pasto cercano > intermedio > remoto. Firma espacial coherente con la huella ganadera, independiente del modelo climático.' },
+      'diag_A_pasto_cercano.png': { title: 'Estrategia A · pasto cercano', desc: 'Anomalías del LAI del pasto cercano a las bordas respecto al modelo climático G6.' },
+      'diag_A_pasto_intermedio.png': { title: 'Estrategia A · pasto intermedio', desc: 'Anomalías del LAI del pasto en zona intermedia respecto al modelo climático G6.' },
+      'diag_A_pasto_remoto.png': { title: 'Estrategia A · pasto remoto', desc: 'Pasto remoto: pseudo-referencia interna usada también en la Estrategia B.' },
+      'diag_A_hayedo_cercano.png': { title: 'Estrategia A · hayedo cercano', desc: 'Anomalías del LAI del hayedo en zona cercana respecto al modelo climático.' },
+      'diag_A_hayedo_intermedio.png': { title: 'Estrategia A · hayedo intermedio', desc: 'Anomalías del LAI del hayedo en zona intermedia respecto al modelo climático.' },
+      'diag_A_hayedo_remoto.png': { title: 'Estrategia A · hayedo remoto', desc: 'Hayedo remoto: termómetro climático que vertebra la Estrategia D.' },
+      'diag_C_anomalias.png': { title: 'Estrategia C · anomalía espacial', desc: 'Comparación píxel a píxel con la mediana del AOI en cada fecha. No requiere modelo ni referencia externa.' },
+      'diagnostico_integrado_global.png': { title: 'Diagnóstico integrado global', desc: 'Síntesis final del diagnóstico cuádruple: convergencia entre estrategias, signo del IPP por año y nivel de fiabilidad.' }
+    }
+  },
+
+  en: {
+    ui: {
+      docTitle: 'Aralar Thesis · Pastoral diagnosis by remote sensing',
+      metaDesc: "Bachelor's thesis on the pastoral diagnosis of the Aralar Natural Park using Sentinel-2 remote sensing, GAM climate modelling and a fourfold triangulation of the PPI. UPV/EHU 2026.",
+      brand: 'Aralar Thesis',
+      subtitle: 'Pastoral diagnosis of the Aralar Natural Park through remote sensing and climate modelling',
+      headerMeta: 'Degree in Geography and Spatial Planning · UPV/EHU · 2026 · LIFE Oreka Mendian',
+      nav_resumen: 'Summary', nav_metodo: 'Methodology', nav_mapas: 'Maps', nav_graficos: 'Charts', nav_docs: 'Documents', nav_repo: 'Repository',
+      hero_h2: 'The project at a glance',
+      hero_lead: "How much of the poor LAI of Aralar's Atlantic subalpine grasslands is attributable to grazing and how much to climate? This thesis builds a pastoral diagnosis system using Sentinel-2 series inverted with PROSAIL, GAM climate modelling and <strong>four PPI strategies</strong> that are triangulated to produce a robust diagnosis.",
+      hero_p2: 'Applied to the SAC ES2120011 Aralar Natural Park between 2018 and 2025, the system reveals a <strong>quasi-biennial pattern</strong> of pastoral pressure: crises in 2020, 2022 and 2025, alternating with relaxation in 2023.',
+      stat_1: 'years of time series', stat_2: 'PPI strategies', stat_3: 'mean LOYO r', stat_4: 'maps generated',
+      metodo_h2: 'Triangulation methodology',
+      metodo_intro: 'The diagnosis is built by combining four methodologically independent strategies. Each answers the same question from a different angle, and the sign convergence among them is the operational criterion of robustness.',
+      strat_A_h3: 'A · Climate GAM',
+      strat_A_p: 'G6 model fitted on the AOI’s aggregated LAI. The residual (observed − predicted) is the pastoral signal.',
+      strat_A_f: 'PPI_A = (LAI_obs − LAI_G6) / LAI_obs',
+      strat_B_h3: 'B · Pseudo-reference',
+      strat_B_p: 'Model trained only on remote grassland zones (least-grazed internal reference). Anomaly relative to that reference.',
+      strat_B_f: 'PPI_B = anomaly vs internal ref.',
+      strat_C_h3: 'C · Spatial anomaly',
+      strat_C_p: 'Comparison with the AOI median on each date. Needs no model or reference, an instantaneous snapshot.',
+      strat_C_f: 'PPI_C = (LAI − median) / median',
+      strat_D_h3: 'D · Beech-forest reference',
+      strat_D_p: 'The beech forest as a climate thermometer. Difference of anomalies relative to their own multi-year phenologies.',
+      strat_D_f: 'PPI_D = anom_grassland − anom_beech',
+      tri_caption: 'Fourfold triangulation of the PPI: each strategy covers the limitations of the others. Sign convergence is the robustness criterion.',
+      mapas_h2: 'Pastoral map gallery',
+      mapas_intro: '12 cartographic products per year for the 2018-2025 series. Select a year and a product to view the corresponding map.',
+      label_year: 'Year', label_product: 'Product',
+      graficos_h2: 'Graphical synthesis of results',
+      graficos_intro: "Full gallery generated automatically from the contents of the repository's <code>figures/</code> folder. Every new figure added appears here without touching the page.",
+      docs_h2: 'Project documents',
+      docs_intro: "List generated automatically from the contents of the repository's <code>docs/</code> folder. Each time a new file is added it will appear here without touching the page.",
+      repo_h2: 'Repository and reproducibility',
+      repo_intro: 'All the pipeline source code is available on GitHub under a Creative Commons BY-NC-ND 4.0 licence. This allows consulting, citing and reproducing the work, but not its commercial use or the distribution of modified derivatives.',
+      repo_li_1: '<code>scripts/python/</code> — Local PROSAIL inversion + NN training + cartography',
+      repo_li_2: '<code>scripts/javascript/</code> — Complete GEE pipeline',
+      repo_li_3: '<code>scripts/R/</code> — Climate modelling and fourfold diagnosis',
+      repo_li_4: '<code>data/</code> — Pipeline output CSVs',
+      repo_li_5: '<code>maps/</code> — Pastoral cartography by year (2018-2025 series, 12 products × 8 years)',
+      repo_li_6: '<code>figures/</code> — Diagnosis synthesis figures',
+      repo_li_7: '<code>docs/</code> — Project documentation (listed automatically on the website)',
+      repo_btn: 'View full source code →',
+      cite_h3: 'Suggested citation',
+      cite_pre: "[Surname, Name] (2026). Pastoral diagnosis of the Aralar Natural\nPark through remote sensing and climate modelling. Bachelor's Thesis,\nDegree in Geography and Spatial Planning, University of the Basque\nCountry / Euskal Herriko Unibertsitatea.\nhttps://github.com/Moxkix/ARALAR_TFG",
+      foot_about_h4: 'About the project',
+      foot_about_p: "Bachelor's thesis in Geography and Spatial Planning (UPV/EHU). Developed within the LIFE Oreka Mendian project (LIFE15 NAT/ES/000762).",
+      foot_thanks_h4: 'Acknowledgements',
+      foot_thanks_1: 'HAZI Fundazioa — LIFE coordination',
+      foot_thanks_2: 'Provincial Council of Gipuzkoa — HIC cartography',
+      foot_thanks_3: 'Government of Navarre — meteorological data',
+      foot_thanks_4: 'GeoEuskadi — DEM5',
+      foot_lic_h4: 'Licence',
+      foot_lic_p: 'This work and all its content are published under a <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</a> licence.',
+      foot_bottom: '© 2026 Aralar Thesis · UPV/EHU · Website built with static HTML/CSS on GitHub Pages'
+    },
+    yearOpt: {
+      2018: '2018 (transition)', 2019: '2019 (equilibrium)', 2020: '2020 (SEVERE CRISIS)', 2021: '2021 (transition)',
+      2022: '2022 (CRISIS)', 2023: '2023 (RELAXATION)', 2024: '2024 (mixed)', 2025: '2025 (moderate CRISIS)'
+    },
+    years: {
+      2018: 'transition', 2019: 'equilibrium', 2020: 'year of severe pastoral crisis, 4/4 concordance',
+      2021: 'mild transition towards pressure', 2022: 'year of severe pastoral crisis, 4/4 concordance',
+      2023: 'year of widespread pastoral relaxation, 4/4 concordance', 2024: 'mixed pattern, 3/4 concordance due to observational reliability',
+      2025: 'year of moderate crisis, 4/4 concordance'
+    },
+    products: {
+      ipp_consenso: 'Integrated consensus PPI', ipp_a: 'PPI A — Climate GAM', ipp_b: 'PPI B — Pseudo-reference',
+      ipp_c: 'PPI C — Spatial anomaly', ipp_espacializado: 'Spatialized PPI (pixel)', concordancia: 'Pixel-by-pixel concordance map',
+      biomasa: 'Estimated biomass (kg/ha)', calidad: 'Forage quality', carga: 'Admissible stocking rate (LU/ha)',
+      balance: 'Forage balance', riesgo: 'Degradation risk', pendiente: 'Slope (control variable)'
+    },
+    mapAlt: 'Pastoral map',
+    status: {
+      docsLoading: 'Loading documents…',
+      docs404: "No documents have been published yet. When files are uploaded to the repository's docs/ folder they will appear here automatically.",
+      docsEmpty: 'The docs/ folder is empty. Upload files to the repository for them to appear here.',
+      docsError: 'Could not load the document list from GitHub.',
+      fileWord: 'file',
+      chartsLoading: 'Loading figures…',
+      chartsEmpty: 'No figures have been published in the figures/ folder yet.',
+      chartsError: 'Could not load the figure list from GitHub.'
+    },
+    figures: {
+      'N1_series_LAI.png': { title: 'Seasonal LAI series by zone (PROSAIL-NN)', desc: 'Evolution of the leaf area index (LAI) by day of year and zone, inverted from Sentinel-2 with PROSAIL-NN (2018-2025). Contrasts the beech-forest canopy (Pagadia) with the grassland (Larrea) at different distances from the shepherd huts.' },
+      'evolucion_IPP_interanual.png': { title: 'Interannual evolution of the PPI', desc: '2018-2025 series of the consensus PPI. Quasi-biennial pattern: crises in 2020, 2022 and 2025 alternating with the 2023 relaxation.' },
+      'IPP_barras_interanual.png': { title: 'PPI by year (bar synthesis)', desc: 'Annual summary of the PPI by strategy. Allows comparing the magnitude of pastoral pressure across years and the coherence among the four strategies.' },
+      'IPP_por_habitat.png': { title: 'PPI by habitat', desc: 'Distribution of the PPI by habitat type (HIC). Identifies which grassland types bear the most pressure.' },
+      'gradiente_IPP_distancia_bordas.png': { title: 'Spatial gradient by distance to the shepherd huts', desc: 'Near > intermediate > remote grassland. Spatial signature consistent with the livestock footprint, independent of the climate model.' },
+      'diag_A_pasto_cercano.png': { title: 'Strategy A · near grassland', desc: 'LAI anomalies of grassland near the shepherd huts relative to the G6 climate model.' },
+      'diag_A_pasto_intermedio.png': { title: 'Strategy A · intermediate grassland', desc: 'LAI anomalies of grassland in the intermediate zone relative to the G6 climate model.' },
+      'diag_A_pasto_remoto.png': { title: 'Strategy A · remote grassland', desc: 'Remote grassland: internal pseudo-reference also used in Strategy B.' },
+      'diag_A_hayedo_cercano.png': { title: 'Strategy A · near beech forest', desc: 'LAI anomalies of the beech forest in the near zone relative to the climate model.' },
+      'diag_A_hayedo_intermedio.png': { title: 'Strategy A · intermediate beech forest', desc: 'LAI anomalies of the beech forest in the intermediate zone relative to the climate model.' },
+      'diag_A_hayedo_remoto.png': { title: 'Strategy A · remote beech forest', desc: 'Remote beech forest: climate thermometer that underpins Strategy D.' },
+      'diag_C_anomalias.png': { title: 'Strategy C · spatial anomaly', desc: 'Pixel-by-pixel comparison with the AOI median on each date. Requires no model or external reference.' },
+      'diagnostico_integrado_global.png': { title: 'Global integrated diagnosis', desc: 'Final synthesis of the fourfold diagnosis: convergence among strategies, sign of the PPI by year and reliability level.' }
+    }
+  }
+};
+
+let CURRENT_LANG = 'eu';
+const t = () => I18N[CURRENT_LANG];
+
+/* ═══════════════════ Mapen galeria / galería de mapas / map gallery ═══════════════════ */
 const yearSelect = document.getElementById('year-select');
 const productSelect = document.getElementById('product-select');
 const mapImage = document.getElementById('map-image');
 const mapCaption = document.getElementById('map-caption');
-
-const productLabels = {
-  ipp_consenso: 'IPP consenso integrado',
-  ipp_a: 'IPP A — GAM climático',
-  ipp_b: 'IPP B — Pseudo-referencia',
-  ipp_c: 'IPP C — Anomalía espacial',
-  ipp_espacializado: 'IPP espacializado (píxel)',
-  concordancia: 'Mapa de concordancia píxel a píxel',
-  biomasa: 'Biomasa estimada (kg/ha)',
-  calidad: 'Calidad forrajera',
-  carga: 'Carga admisible (UGM/ha)',
-  balance: 'Balance forrajero',
-  riesgo: 'Riesgo de degradación',
-  pendiente: 'Pendiente (variable de control)'
-};
-
-const yearTags = {
-  2018: 'transición',
-  2019: 'equilibrio',
-  2020: 'año de crisis pastoral severa, concordancia 4/4',
-  2021: 'transición leve hacia presión',
-  2022: 'año de crisis pastoral severa, concordancia 4/4',
-  2023: 'año de relajación pastoral generalizada, concordancia 4/4',
-  2024: 'patrón mixto, concordancia 3/4 por fiabilidad observacional',
-  2025: 'año de crisis moderada, concordancia 4/4'
-};
 
 const productFiles = {
   ipp_consenso: y => `aralar_mapa_IPP_consenso_pastos_${y}.png`,
@@ -257,9 +546,10 @@ function updateMap() {
   const year = yearSelect.value;
   const product = productSelect.value;
   const filename = `maps/${year}/${productFiles[product](year)}`;
+  const label = t().products[product];
   mapImage.src = filename;
-  mapImage.alt = `${productLabels[product]} — ${year}`;
-  mapCaption.textContent = `${productLabels[product]} — ${year} (${yearTags[year]})`;
+  mapImage.alt = `${label} — ${year}`;
+  mapCaption.textContent = `${label} — ${year} (${t().years[year]})`;
 }
 
 yearSelect.addEventListener('change', updateMap);
@@ -273,144 +563,12 @@ document.querySelectorAll('nav a').forEach(link => {
   });
 });
 
+/* ═══════════════════ Dokumentuak / documentos / documents ═══════════════════ */
 const DOCS_REPO = 'Moxkix/ARALAR_TFG';
 const DOCS_BRANCH = 'main';
 const DOCS_PATH = 'docs';
-
-const docIcons = {
-  pdf: '📊',
-  doc: '📄', docx: '📄',
-  xls: '📈', xlsx: '📈', csv: '📈',
-  ppt: '📽️', pptx: '📽️',
-  txt: '📝', md: '📝',
-  zip: '🗂️', rar: '🗂️', '7z': '🗂️',
-  png: '🖼️', jpg: '🖼️', jpeg: '🖼️', gif: '🖼️', svg: '🖼️'
-};
-
-function iconFor(ext) {
-  return docIcons[ext.toLowerCase()] || '📎';
-}
-
-function humanSize(bytes) {
-  if (!bytes && bytes !== 0) return '';
-  const units = ['B', 'KB', 'MB', 'GB'];
-  let i = 0;
-  let n = bytes;
-  while (n >= 1024 && i < units.length - 1) { n /= 1024; i++; }
-  return `${n.toFixed(n >= 10 || i === 0 ? 0 : 1)} ${units[i]}`;
-}
-
-function prettyName(filename) {
-  const dot = filename.lastIndexOf('.');
-  const base = dot > 0 ? filename.slice(0, dot) : filename;
-  return base.replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
-}
-
-function extOf(filename) {
-  const dot = filename.lastIndexOf('.');
-  return dot > 0 ? filename.slice(dot + 1) : '';
-}
-
-async function loadDocs() {
-  const grid = document.getElementById('docs-grid');
-  const status = document.getElementById('docs-status');
-  if (!grid) return;
-  try {
-    const url = `https://api.github.com/repos/${DOCS_REPO}/contents/${DOCS_PATH}?ref=${DOCS_BRANCH}`;
-    const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
-    if (res.status === 404) {
-      status.textContent = 'Aún no se han publicado documentos. Cuando se suban archivos a la carpeta docs/ del repositorio aparecerán aquí automáticamente.';
-      return;
-    }
-    if (!res.ok) throw new Error(`GitHub API ${res.status}`);
-    const items = await res.json();
-    const files = items
-      .filter(it => it.type === 'file')
-      .sort((a, b) => a.name.localeCompare(b.name, 'es'));
-    if (files.length === 0) {
-      status.textContent = 'La carpeta docs/ está vacía. Sube archivos al repositorio para que aparezcan aquí.';
-      return;
-    }
-    grid.innerHTML = '';
-    for (const f of files) {
-      const ext = extOf(f.name);
-      const a = document.createElement('a');
-      a.className = 'doc';
-      a.href = `${DOCS_PATH}/${encodeURIComponent(f.name)}`;
-      a.target = '_blank';
-      a.rel = 'noopener';
-      a.innerHTML = `
-        <div class="doc-icon">${iconFor(ext)}</div>
-        <h3>${prettyName(f.name)}</h3>
-        <p>${f.name}</p>
-        <span class="doc-format">${ext.toUpperCase() || 'archivo'}${f.size ? ' · ' + humanSize(f.size) : ''}</span>
-      `;
-      grid.appendChild(a);
-    }
-  } catch (err) {
-    status.textContent = 'No se ha podido cargar el listado de documentos desde GitHub.';
-  }
-}
-
-loadDocs();
-
 const FIGURES_PATH = 'figures';
 const FIGURES_EXCLUDE = new Set(['IPP_triangulacion_ABCD.png']);
-
-const figureMeta = {
-  'N1_series_LAI.png': {
-    title: 'Serie estacional de LAI por zona (PROSAIL-NN)',
-    desc: 'Evolución del índice de área foliar (LAI) por día del año y zona, invertido de Sentinel-2 con PROSAIL-NN (2018-2025). Contrasta el dosel del hayedo (Pagadia) con el pasto (Larrea) a distinta distancia de las bordas.'
-  },
-  'evolucion_IPP_interanual.png': {
-    title: 'Evolución interanual del IPP',
-    desc: 'Serie 2018-2025 del IPP consenso. Patrón cuasi-bianual: crisis en 2020, 2022 y 2025 alternadas con la relajación de 2023.'
-  },
-  'IPP_barras_interanual.png': {
-    title: 'IPP por año (síntesis en barras)',
-    desc: 'Resumen anual del IPP por estrategia. Permite comparar la magnitud de la presión pastoral entre años y la coherencia entre las cuatro estrategias.'
-  },
-  'IPP_por_habitat.png': {
-    title: 'IPP por hábitat',
-    desc: 'Distribución del IPP por tipo de hábitat (HIC). Identifica qué tipos de pasto soportan más presión.'
-  },
-  'gradiente_IPP_distancia_bordas.png': {
-    title: 'Gradiente espacial por distancia a las bordas',
-    desc: 'Pasto cercano > intermedio > remoto. Firma espacial coherente con la huella ganadera, independiente del modelo climático.'
-  },
-  'diag_A_pasto_cercano.png': {
-    title: 'Estrategia A · pasto cercano',
-    desc: 'Anomalías del LAI del pasto cercano a las bordas respecto al modelo climático G6.'
-  },
-  'diag_A_pasto_intermedio.png': {
-    title: 'Estrategia A · pasto intermedio',
-    desc: 'Anomalías del LAI del pasto en zona intermedia respecto al modelo climático G6.'
-  },
-  'diag_A_pasto_remoto.png': {
-    title: 'Estrategia A · pasto remoto',
-    desc: 'Pasto remoto: pseudo-referencia interna usada también en la Estrategia B.'
-  },
-  'diag_A_hayedo_cercano.png': {
-    title: 'Estrategia A · hayedo cercano',
-    desc: 'Anomalías del LAI del hayedo en zona cercana respecto al modelo climático.'
-  },
-  'diag_A_hayedo_intermedio.png': {
-    title: 'Estrategia A · hayedo intermedio',
-    desc: 'Anomalías del LAI del hayedo en zona intermedia respecto al modelo climático.'
-  },
-  'diag_A_hayedo_remoto.png': {
-    title: 'Estrategia A · hayedo remoto',
-    desc: 'Hayedo remoto: termómetro climático que vertebra la Estrategia D.'
-  },
-  'diag_C_anomalias.png': {
-    title: 'Estrategia C · anomalía espacial',
-    desc: 'Comparación píxel a píxel con la mediana del AOI en cada fecha. No requiere modelo ni referencia externa.'
-  },
-  'diagnostico_integrado_global.png': {
-    title: 'Diagnóstico integrado global',
-    desc: 'Síntesis final del diagnóstico cuádruple: convergencia entre estrategias, signo del IPP por año y nivel de fiabilidad.'
-  }
-};
 
 const FIGURE_ORDER = [
   'evolucion_IPP_interanual.png',
@@ -428,16 +586,110 @@ const FIGURE_ORDER = [
   'N1_series_LAI.png'
 ];
 
+const docIcons = {
+  pdf: '📊',
+  doc: '📄', docx: '📄',
+  xls: '📈', xlsx: '📈', csv: '📈',
+  ppt: '📽️', pptx: '📽️',
+  txt: '📝', md: '📝',
+  zip: '🗂️', rar: '🗂️', '7z': '🗂️',
+  png: '🖼️', jpg: '🖼️', jpeg: '🖼️', gif: '🖼️', svg: '🖼️'
+};
+function iconFor(ext) { return docIcons[ext.toLowerCase()] || '📎'; }
+
+function humanSize(bytes) {
+  if (!bytes && bytes !== 0) return '';
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let i = 0, n = bytes;
+  while (n >= 1024 && i < units.length - 1) { n /= 1024; i++; }
+  return `${n.toFixed(n >= 10 || i === 0 ? 0 : 1)} ${units[i]}`;
+}
+function prettyName(filename) {
+  const dot = filename.lastIndexOf('.');
+  const base = dot > 0 ? filename.slice(0, dot) : filename;
+  return base.replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function extOf(filename) {
+  const dot = filename.lastIndexOf('.');
+  return dot > 0 ? filename.slice(dot + 1) : '';
+}
+
+// Egoera-katxea: API-deia behin bakarrik egiten da; hizkuntza aldatzean katxetik berrmargozten da.
+let docsState = { kind: 'loading', files: [] };
+let chartsState = { kind: 'loading', images: [] };
+
+function renderDocs() {
+  const grid = document.getElementById('docs-grid');
+  if (!grid) return;
+  const s = t().status;
+  if (docsState.kind === 'loading') { grid.innerHTML = `<p class="docs-status">${s.docsLoading}</p>`; return; }
+  if (docsState.kind === 'notfound') { grid.innerHTML = `<p class="docs-status">${s.docs404}</p>`; return; }
+  if (docsState.kind === 'empty') { grid.innerHTML = `<p class="docs-status">${s.docsEmpty}</p>`; return; }
+  if (docsState.kind === 'error') { grid.innerHTML = `<p class="docs-status">${s.docsError}</p>`; return; }
+  grid.innerHTML = '';
+  for (const f of docsState.files) {
+    const ext = extOf(f.name);
+    const a = document.createElement('a');
+    a.className = 'doc';
+    a.href = `${DOCS_PATH}/${encodeURIComponent(f.name)}`;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.innerHTML = `
+      <div class="doc-icon">${iconFor(ext)}</div>
+      <h3>${prettyName(f.name)}</h3>
+      <p>${f.name}</p>
+      <span class="doc-format">${ext.toUpperCase() || s.fileWord}${f.size ? ' · ' + humanSize(f.size) : ''}</span>
+    `;
+    grid.appendChild(a);
+  }
+}
+
+async function loadDocs() {
+  try {
+    const url = `https://api.github.com/repos/${DOCS_REPO}/contents/${DOCS_PATH}?ref=${DOCS_BRANCH}`;
+    const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
+    if (res.status === 404) { docsState = { kind: 'notfound', files: [] }; renderDocs(); return; }
+    if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+    const items = await res.json();
+    const files = items.filter(it => it.type === 'file').sort((a, b) => a.name.localeCompare(b.name, 'es'));
+    docsState = files.length === 0 ? { kind: 'empty', files: [] } : { kind: 'ok', files };
+    renderDocs();
+  } catch (err) {
+    docsState = { kind: 'error', files: [] };
+    renderDocs();
+  }
+}
+
+/* ═══════════════════ Irudien galeria / galería de figuras / figure gallery ═══════════════════ */
 function prettyFigureTitle(filename) {
   const dot = filename.lastIndexOf('.');
   const base = dot > 0 ? filename.slice(0, dot) : filename;
   return base.replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-async function loadCharts() {
+function renderCharts() {
   const grid = document.getElementById('charts-grid');
-  const status = document.getElementById('charts-status');
   if (!grid) return;
+  const s = t().status;
+  if (chartsState.kind === 'loading') { grid.innerHTML = `<p class="docs-status">${s.chartsLoading}</p>`; return; }
+  if (chartsState.kind === 'empty') { grid.innerHTML = `<p class="docs-status">${s.chartsEmpty}</p>`; return; }
+  if (chartsState.kind === 'error') { grid.innerHTML = `<p class="docs-status">${s.chartsError}</p>`; return; }
+  const figs = t().figures;
+  grid.innerHTML = '';
+  for (const img of chartsState.images) {
+    const meta = figs[img.name] || { title: prettyFigureTitle(img.name), desc: img.name };
+    const div = document.createElement('div');
+    div.className = 'chart';
+    div.innerHTML = `
+      <img src="${FIGURES_PATH}/${encodeURIComponent(img.name)}" alt="${meta.title}" loading="lazy">
+      <h3>${meta.title}</h3>
+      <p>${meta.desc}</p>
+    `;
+    grid.appendChild(div);
+  }
+}
+
+async function loadCharts() {
   try {
     const url = `https://api.github.com/repos/${DOCS_REPO}/contents/${FIGURES_PATH}?ref=${DOCS_BRANCH}`;
     const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
@@ -446,42 +698,63 @@ async function loadCharts() {
     const images = items
       .filter(it => it.type === 'file' && /\.(png|jpe?g|gif|svg)$/i.test(it.name))
       .filter(it => !FIGURES_EXCLUDE.has(it.name));
-
     const orderIndex = name => {
       const i = FIGURE_ORDER.indexOf(name);
       return i === -1 ? Number.MAX_SAFE_INTEGER : i;
     };
     images.sort((a, b) => {
-      const ia = orderIndex(a.name);
-      const ib = orderIndex(b.name);
+      const ia = orderIndex(a.name), ib = orderIndex(b.name);
       if (ia !== ib) return ia - ib;
       return a.name.localeCompare(b.name, 'es');
     });
-
-    if (images.length === 0) {
-      status.textContent = 'Aún no se han publicado figuras en la carpeta figures/.';
-      return;
-    }
-    grid.innerHTML = '';
-    for (const img of images) {
-      const meta = figureMeta[img.name] || {
-        title: prettyFigureTitle(img.name),
-        desc: img.name
-      };
-      const div = document.createElement('div');
-      div.className = 'chart';
-      div.innerHTML = `
-        <img src="${FIGURES_PATH}/${encodeURIComponent(img.name)}" alt="${meta.title}" loading="lazy">
-        <h3>${meta.title}</h3>
-        <p>${meta.desc}</p>
-      `;
-      grid.appendChild(div);
-    }
+    chartsState = images.length === 0 ? { kind: 'empty', images: [] } : { kind: 'ok', images };
+    renderCharts();
   } catch (err) {
-    status.textContent = 'No se ha podido cargar el listado de figuras desde GitHub.';
+    chartsState = { kind: 'error', images: [] };
+    renderCharts();
   }
 }
 
+/* ═══════════════════ Hizkuntza aplikatu / aplicar idioma / apply language ═══════════════════ */
+function applyLang(lang) {
+  if (!I18N[lang]) lang = 'eu';
+  CURRENT_LANG = lang;
+  const tt = I18N[lang];
+  document.documentElement.lang = lang;
+  document.title = tt.ui.docTitle;
+  const md = document.querySelector('meta[name="description"]');
+  if (md) md.setAttribute('content', tt.ui.metaDesc);
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (tt.ui[key] !== undefined) el.innerHTML = tt.ui[key];
+  });
+
+  document.querySelectorAll('#year-select option').forEach(o => {
+    if (tt.yearOpt[o.value]) o.textContent = tt.yearOpt[o.value];
+  });
+  document.querySelectorAll('#product-select option').forEach(o => {
+    if (tt.products[o.value]) o.textContent = tt.products[o.value];
+  });
+
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+
+  try { localStorage.setItem('aralar_lang', lang); } catch (e) {}
+
+  updateMap();
+  renderDocs();
+  renderCharts();
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+});
+
+let initialLang = 'eu';
+try { const saved = localStorage.getItem('aralar_lang'); if (saved && I18N[saved]) initialLang = saved; } catch (e) {}
+applyLang(initialLang);
+
+loadDocs();
 loadCharts();
 </script>
 
