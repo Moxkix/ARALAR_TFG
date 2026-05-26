@@ -106,7 +106,6 @@
           <option value="ipp_a">IPP A — GAM climático</option>
           <option value="ipp_b">IPP B — Pseudo-referencia</option>
           <option value="ipp_c">IPP C — Anomalía espacial</option>
-          <option value="ipp_d">IPP D — Referencia hayedo</option>
           <option value="ipp_espacializado">IPP espacializado (píxel)</option>
           <option value="concordancia">Mapa de concordancia (k/n)</option>
           <option value="biomasa">Biomasa estimada (kg/ha)</option>
@@ -218,7 +217,6 @@ const productLabels = {
   ipp_a: 'IPP A — GAM climático',
   ipp_b: 'IPP B — Pseudo-referencia',
   ipp_c: 'IPP C — Anomalía espacial',
-  ipp_d: 'IPP D — Referencia hayedo',
   ipp_espacializado: 'IPP espacializado (píxel)',
   concordancia: 'Mapa de concordancia píxel a píxel',
   biomasa: 'Biomasa estimada (kg/ha)',
@@ -245,7 +243,6 @@ const productFiles = {
   ipp_a: y => `aralar_mapa_IPP_A_pastos_${y}.png`,
   ipp_b: y => `aralar_mapa_IPP_B_pastos_${y}.png`,
   ipp_c: y => `aralar_mapa_IPP_C_pastos_${y}.png`,
-  ipp_d: y => `aralar_mapa_IPP_D_pastos_${y}.png`,
   ipp_espacializado: y => `aralar_mapa_IPP_espacializado_${y}.png`,
   concordancia: y => `aralar_mapa_IPP_concordancia_pastos_${y}.png`,
   biomasa: y => `aralar_pastos_mapa_biomasa_${y}.png`,
@@ -361,6 +358,10 @@ const FIGURES_PATH = 'figures';
 const FIGURES_EXCLUDE = new Set(['IPP_triangulacion_ABCD.png']);
 
 const figureMeta = {
+  'N1_series_LAI.png': {
+    title: 'Serie estacional de LAI por zona (PROSAIL-NN)',
+    desc: 'Evolución del índice de área foliar (LAI) por día del año y zona, invertido de Sentinel-2 con PROSAIL-NN (2018-2025). Contrasta el dosel del hayedo (Pagadia) con el pasto (Larrea) a distinta distancia de las bordas.'
+  },
   'evolucion_IPP_interanual.png': {
     title: 'Evolución interanual del IPP',
     desc: 'Serie 2018-2025 del IPP consenso. Patrón cuasi-bianual: crisis en 2020, 2022 y 2025 alternadas con la relajación de 2023.'
@@ -423,7 +424,8 @@ const FIGURE_ORDER = [
   'diag_A_hayedo_intermedio.png',
   'diag_A_hayedo_remoto.png',
   'diag_C_anomalias.png',
-  'diagnostico_integrado_global.png'
+  'diagnostico_integrado_global.png',
+  'N1_series_LAI.png'
 ];
 
 function prettyFigureTitle(filename) {

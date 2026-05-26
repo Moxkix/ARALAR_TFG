@@ -1,5 +1,5 @@
 # Cartografia pastoral v5 — Aralar 2019
-# Generado: 2026-04-24T12:28:49
+# Generado: 2026-05-15T12:02:11
 # Comando: python cartografia_pastoral_v5.py --prosail .\\PROSAIL_NN_Aralar_2019.tif --hic .\HIC_tipo_aralar.tif --bordas .\dist_borda_aralar.tif --dem .\MDT05_aralar.tif --output_dir mapas\2019_LIFE --carga 0.7 --temporada 180 --ipp_a .\\IPP_estrategia_A_2019.tif --ipp_csv .\diagnostico_pastoral.csv
 # Log: mapas\2019_LIFE\aralar_resumen_2019.txt
 
@@ -12,7 +12,7 @@
 
 1. Cargando PROSAIL GeoTIFF...
    Pixeles validos: 126,004
-   LAI rango: [0.25, 6.34]
+   LAI rango: [0.35, 6.33]
 
 2. Cargando capas auxiliares...
    HIC: .\HIC_tipo_aralar.tif
@@ -22,7 +22,7 @@
      TIPO 4 (Encinar): 8,415 px (337 ha)
    Bordas: .\dist_borda_aralar.tif
    DEM 5m: .\MDT05_aralar.tif
-   Pendiente rango: [0.0, 76.2] grados
+   Pendiente rango: [0.0, 88.7] grados
 
    Pixeles PASTO validos: 73,174 (2927 ha)
 
@@ -46,32 +46,27 @@
   Cargando CSV zonal: .\diagnostico_pastoral.csv
   CSV zonal cargado: 6 zonas para el año 2019
 
-9b. IPP Estrategia A 2019 (correccion climatica GAM G6)...
+9b. IPP Estrategia A 2019 (correccion climatica GAM G6m)...
   -> mapas\2019_LIFE\aralar_mapa_IPP_A_todos_2019.png
   -> mapas\2019_LIFE\aralar_mapa_IPP_A_pastos_2019.png
 
 9c. IPP Estrategia B 2019 (espacializado por zona desde CSV R)...
   -> mapas\2019_LIFE\aralar_mapa_IPP_B_pastos_2019.png
 
-9d. IPP Estrategia D 2019 (espacializado por zona desde CSV R)...
-  -> mapas\2019_LIFE\aralar_mapa_IPP_D_todos_2019.png
-  -> mapas\2019_LIFE\aralar_mapa_IPP_D_pastos_2019.png
-
-9e. IPP consenso + concordancia (4 estrategias: A+B+C+D)...
+9e. IPP consenso + concordancia (3 estrategias: A+B+C)...
   -> mapas\2019_LIFE\aralar_mapa_IPP_consenso_pastos_2019.png
   -> mapas\2019_LIFE\aralar_mapa_IPP_concordancia_pastos_2019.png
 
   Comparativa entre estrategias por anillo (solo pastos):
-  Anillo                     IPP_A  IPP_B  IPP_C  IPP_D  Consen.
-  Cercano <500m              -0.095  -0.148  +0.027  -0.005  -0.055
-  Intermedio 500-1500m       -0.098  -0.132  +0.019  -0.003  -0.054
-  Remoto >1500m              -0.039  +0.000  +0.247  -0.000  +0.052
+  Anillo                     IPP_A  IPP_B  IPP_C  Consen.
+  Cercano <500m              -0.127  -0.034  +0.074  -0.029
+  Intermedio 500-1500m       -0.123  -0.026  +0.051  -0.032
+  Remoto >1500m              -0.087  +0.000  +0.327  +0.080
 
-  Distribucion de concordancia (% pixeles pasto, n=4 estrategias):
-    1/4 (sensible):  20.3%
-    2/4 (sensible):   5.1%
-    3/4 (parcial):  37.4%
-    4/4 (robusto):  37.2%
+  Distribucion de concordancia (% pixeles pasto, n=3 estrategias):
+    1/3 (sensible):  34.3%
+    2/3 (parcial):  23.8%
+    3/3 (robusto):  41.9%
 
 10. Exportando GeoTIFFs 2019...
   -> mapas\2019_LIFE\aralar_biomasa_pastos_2019.tif
@@ -83,8 +78,6 @@
   -> mapas\2019_LIFE\aralar_IPP_A_todos_2019.tif
   -> mapas\2019_LIFE\aralar_IPP_A_pastos_2019.tif
   -> mapas\2019_LIFE\aralar_IPP_B_pastos_2019.tif
-  -> mapas\2019_LIFE\aralar_IPP_D_todos_2019.tif
-  -> mapas\2019_LIFE\aralar_IPP_D_pastos_2019.tif
   -> mapas\2019_LIFE\aralar_IPP_consenso_pastos_2019.tif
   -> mapas\2019_LIFE\aralar_calidad_pastos_2019.tif
   -> mapas\2019_LIFE\aralar_riesgo_pastos_2019.tif
@@ -97,39 +90,39 @@
   Turnover: 3.0 | Aprovech.: 0.55
 =================================================================
   Superficie pastoral:     2927 ha
-  Biomasa en pie media:    739 kg MS/ha
-  Produccion total media:  2216 kg MS/ha
-  Capacidad media:         0.56 UGM/ha
-  Balance medio:           -0.136 UGM/ha
-  Pendiente media:         20.7 grados
+  Biomasa en pie media:    856 kg MS/ha
+  Produccion total media:  2567 kg MS/ha
+  Capacidad media:         0.65 UGM/ha
+  Balance medio:           -0.046 UGM/ha
+  Pendiente media:         21.3 grados
 
-  % pixeles deficit:       76.8%
-  % pixeles equilibrio:    26.2%
-  % pixeles excedente:     13.0%
+  % pixeles deficit:       62.9%
+  % pixeles equilibrio:    23.3%
+  % pixeles excedente:     26.8%
 
   IPP medio por anillo (solo pastos):
-    Cercano <500m            : IPP = +0.027  (n=37,253)
-    Intermedio 500-1500m     : IPP = +0.019  (n=33,247)
-    Remoto >1500m            : IPP = +0.247  (n=2,674)
+    Cercano <500m            : IPP = +0.074  (n=37,253)
+    Intermedio 500-1500m     : IPP = +0.051  (n=33,247)
+    Remoto >1500m            : IPP = +0.327  (n=2,674)
 
   IPP medio por tipo de habitat:
-    Pasto     : IPP = +0.032  (n=73,174)
-    Hayedo    : IPP = -0.010  (n=39,728)
+    Pasto     : IPP = +0.073  (n=73,174)
+    Hayedo    : IPP = -0.008  (n=39,728)
 
   Calidad pastoral:
     Muy pobre   :   0.0%
-    Pobre       :   3.9%
-    Moderado    :  22.1%
-    Bueno       :  72.4%
-    Excelente   :   1.6%
+    Pobre       :   1.5%
+    Moderado    :  19.7%
+    Bueno       :  64.9%
+    Excelente   :  13.9%
 
   Diagnostico de riesgo:
-    Matorralizacion     :   3.9%
-    Subpastoreo leve    :   7.7%
-    Equilibrio          :  23.9%
-    Presion elevada     :  22.1%
-    Degradacion         :  26.0%
-    Erosion             :  16.4%
+    Matorralizacion     :   9.9%
+    Subpastoreo leve    :  15.1%
+    Equilibrio          :  22.4%
+    Presion elevada     :  17.3%
+    Degradacion         :  21.1%
+    Erosion             :  14.3%
 
   Ficheros en: mapas\2019_LIFE/
   Resumen completo en: mapas\2019_LIFE\aralar_resumen_2019.txt

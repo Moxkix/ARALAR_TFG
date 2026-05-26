@@ -327,15 +327,15 @@ def plot_continuous(data, transform, title, label, cmap, vmin, vmax, outpath,
     plt.colorbar(im, cax=cax, label=label)
 
     ax.set_title(title, fontsize=13, fontweight='bold')
-    ax.set_xlabel('Este (m)')
-    ax.set_ylabel('Norte (m)')
+    ax.set_xlabel('Ekialdea (m)')
+    ax.set_ylabel('Iparraldea (m)')
     ax.ticklabel_format(axis='y', style='scientific', scilimits=(6, 6))
 
     if stats:
         valid = data[~np.isnan(data)]
         if len(valid) > 0:
-            txt = (f"Media: {np.mean(valid):.2f}\nMediana: {np.median(valid):.2f}\n"
-                   f"Std: {np.std(valid):.2f}\nMin: {np.min(valid):.2f}\n"
+            txt = (f"Batezbestekoa: {np.mean(valid):.2f}\nMediana: {np.median(valid):.2f}\n"
+                   f"Desbid.: {np.std(valid):.2f}\nMin: {np.min(valid):.2f}\n"
                    f"Max: {np.max(valid):.2f}")
             ax.text(0.02, 0.02, txt, transform=ax.transAxes, fontsize=9,
                     va='bottom', bbox=dict(boxstyle='round', fc='white', alpha=0.85))
@@ -370,8 +370,8 @@ def plot_classified(data, transform, title, classes, colors, outpath,
               edgecolor='gray', bbox_to_anchor=(1.42, 1.0))
 
     ax.set_title(title, fontsize=13, fontweight='bold')
-    ax.set_xlabel('Este (m)')
-    ax.set_ylabel('Norte (m)')
+    ax.set_xlabel('Ekialdea (m)')
+    ax.set_ylabel('Iparraldea (m)')
     ax.ticklabel_format(axis='y', style='scientific', scilimits=(6, 6))
 
     plt.savefig(outpath)
@@ -396,20 +396,20 @@ def plot_ipp_spatial(ipp, transform, title, outpath, hic_tipo=None):
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="3%", pad=0.08)
     cbar = plt.colorbar(im, cax=cax)
-    cbar.set_label('IPP (rojo = sobrepastoreo | verde = infrautilizacion)')
+    cbar.set_label('LPI (gorria = gainlarratzea | berdea = azpierabilera)')
 
     ax.set_title(title, fontsize=13, fontweight='bold')
-    ax.set_xlabel('Este (m)')
-    ax.set_ylabel('Norte (m)')
+    ax.set_xlabel('Ekialdea (m)')
+    ax.set_ylabel('Iparraldea (m)')
     ax.ticklabel_format(axis='y', style='scientific', scilimits=(6, 6))
 
     if hic_tipo is not None:
-        nombres = {1: 'Pasto', 2: 'Brezal', 3: 'Hayedo', 4: 'Encinar'}
+        nombres = {1: 'Larrea', 2: 'Txilardia', 3: 'Pagadia', 4: 'Artadia'}
         lines = []
         for tipo, nombre in nombres.items():
             m = (hic_tipo == tipo) & ~np.isnan(ipp)
             if np.sum(m) > 0:
-                lines.append(f"{nombre}: IPP={np.mean(ipp[m]):+.3f} (n={np.sum(m):,})")
+                lines.append(f"{nombre}: LPI={np.mean(ipp[m]):+.3f} (n={np.sum(m):,})")
         if lines:
             ax.text(0.02, 0.02, '\n'.join(lines), transform=ax.transAxes, fontsize=9,
                     va='bottom', bbox=dict(boxstyle='round', fc='white', alpha=0.85))
@@ -541,8 +541,8 @@ def main():
     biomass[pasto_mask] = lai_to_biomass(lai[pasto_mask])
 
     plot_continuous(biomass, ref_transform,
-        f"Biomasa forrajera estimada — Pastos de Aralar {year}",
-        "kg MS/ha", 'YlGnBu', 0, Config.BIO_MAX,
+        f"Belar-biomasa estimatua — Aralarko larreak {year}",
+        "kg ML/ha", 'YlGnBu', 0, Config.BIO_MAX,
         os.path.join(args.output_dir, f"aralar_pastos_mapa_biomasa_{year}.png"),
         hic_tipo=hic_tipo, pasto_only=True)
 
@@ -552,8 +552,8 @@ def main():
     quality[pasto_mask] = compute_quality(lai[pasto_mask], cab[pasto_mask])
 
     plot_classified(quality, ref_transform,
-        f"Calidad pastoral — Pastos de Aralar {year}",
-        ['Muy pobre', 'Pobre', 'Moderado', 'Bueno', 'Excelente'],
+        f"Larre-kalitatea — Aralarko larreak {year}",
+        ['Oso urria', 'Urria', 'Ertaina', 'Ona', 'Bikaina'],
         ['#d32f2f', '#ff9800', '#fdd835', '#4caf50', '#1b5e20'],
         os.path.join(args.output_dir, f"aralar_pastos_mapa_calidad_{year}.png"),
         hic_tipo=hic_tipo, pasto_only=True)
@@ -564,9 +564,9 @@ def main():
     capacity[pasto_mask] = biomass_to_ugm(biomass[pasto_mask])
 
     plot_continuous(capacity, ref_transform,
-        f"Capacidad de acogida ganadera — Pastos de Aralar {year}\n"
-        f"Turnover={Config.TURNOVER} | Aprovech.={Config.APROVECH} | {Config.TEMPORADA} dias",
-        "UGM/ha", 'RdYlGn', 0, 2.0,
+        f"Abere-hartzeko gaitasuna — Aralarko larreak {year}\n"
+        f"Birsorkuntza={Config.TURNOVER} | Aprob.={Config.APROVECH} | {Config.TEMPORADA} egun",
+        "ALU/ha", 'RdYlGn', 0, 2.0,
         os.path.join(args.output_dir, f"aralar_pastos_mapa_carga_{year}.png"),
         hic_tipo=hic_tipo, pasto_only=True)
 
@@ -576,9 +576,9 @@ def main():
     balance[pasto_mask] = capacity[pasto_mask] - Config.CARGA_REF
 
     plot_continuous(balance, ref_transform,
-        f"Balance forrajero — Pastos de Aralar {year}\n"
-        f"Demanda={Config.CARGA_REF} UGM/ha | Turnover={Config.TURNOVER} | {Config.TEMPORADA} dias",
-        "Balance (UGM/ha)", 'RdYlGn', -0.5, 0.5,
+        f"Belar-balantzea — Aralarko larreak {year}\n"
+        f"Eskaria={Config.CARGA_REF} ALU/ha | Birsorkuntza={Config.TURNOVER} | {Config.TEMPORADA} egun",
+        "Balantzea (ALU/ha)", 'RdYlGn', -0.5, 0.5,
         os.path.join(args.output_dir, f"aralar_pastos_mapa_balance_{year}.png"),
         hic_tipo=hic_tipo, pasto_only=True)
 
@@ -588,12 +588,12 @@ def main():
     risk[pasto_mask] = compute_risk(balance[pasto_mask], slope[pasto_mask])
 
     plot_classified(risk, ref_transform,
-        f"Diagnostico de desequilibrio — Pastos de Aralar {year}\n"
-        f"DEM 5m GeoEuskadi | Carga ref. {Config.CARGA_REF} UGM/ha",
-        ['Matorralizacion (subpastoreo severo)',
-         'Subpastoreo leve', 'Equilibrio pastoral',
-         'Presion elevada', 'Degradacion (sobrepastoreo severo)',
-         'Erosion (sobrepastoreo + pendiente)'],
+        f"Desorekaren diagnostikoa — Aralarko larreak {year}\n"
+        f"DEM 5m GeoEuskadi | Erref. karga {Config.CARGA_REF} ALU/ha",
+        ['Sastrakatzea (azpilarratze larria)',
+         'Azpilarratze arina', 'Larre-oreka',
+         'Presio handia', 'Degradazioa (gainlarratze larria)',
+         'Higadura (gainlarratzea + malda)'],
         ['#0d47a1', '#64b5f6', '#4caf50', '#ff9800', '#d32f2f', '#3e2723'],
         os.path.join(args.output_dir, f"aralar_pastos_mapa_riesgo_{year}.png"),
         hic_tipo=hic_tipo, pasto_only=True)
@@ -604,8 +604,8 @@ def main():
     slope_pasto[pasto_mask] = slope[pasto_mask]
 
     plot_continuous(slope_pasto, ref_transform,
-        f"Pendiente — Pastos de Aralar {year} (DEM 5m GeoEuskadi)",
-        "Pendiente (grados)", 'YlOrRd', 0, 45,
+        f"Malda — Aralarko larreak {year} (DEM 5m GeoEuskadi)",
+        "Malda (graduak)", 'YlOrRd', 0, 45,
         os.path.join(args.output_dir, f"aralar_pastos_mapa_pendiente_{year}.png"),
         hic_tipo=hic_tipo, pasto_only=True)
 
@@ -614,8 +614,8 @@ def main():
     ipp, anillo = compute_spatial_ipp(lai, hic_tipo, dist_borda)
 
     plot_ipp_spatial(ipp, ref_transform,
-        f"IPP espacializado — Aralar {year}\n"
-        f"Anomalia LAI por habitat x anillo de distancia a bordas",
+        f"LPI espazializatua — Aralar {year}\n"
+        f"LAI anomalia habitataren eta bordetarainoko distantzia-eraztunaren arabera",
         os.path.join(args.output_dir, f"aralar_mapa_IPP_espacializado_{year}.png"),
         hic_tipo=hic_tipo)
 
@@ -624,8 +624,8 @@ def main():
     ipp_pasto[hic_tipo != 1] = np.nan
 
     plot_ipp_spatial(ipp_pasto, ref_transform,
-        f"IPP espacializado (Estr. C) — Solo pastos Aralar {year}\n"
-        f"Anomalia LAI por anillo de distancia a bordas",
+        f"LPI espazializatua (C estr.) — Aralarko larreak soilik {year}\n"
+        f"LAI anomalia bordetarainoko distantzia-eraztunaren arabera",
         os.path.join(args.output_dir, f"aralar_mapa_IPP_C_pastos_{year}.png"),
         hic_tipo=hic_tipo)
 
@@ -646,8 +646,8 @@ def main():
         ipp_a[~valid | (hic_tipo == 0)] = np.nan
 
         plot_ipp_spatial(ipp_a, ref_transform,
-            f"IPP Estrategia A (correccion climatica G6) — Aralar {year}\n"
-            f"Residuo LAI_norm respecto a modelo GAM: s(GDA) + s(P60) + s(SM_root)",
+            f"LPI A estrategia (G6 zuzenketa klimatikoa) — Aralar {year}\n"
+            f"LAI_norm hondarra GAM ereduarekiko: s(GDA) + s(P60) + s(SM_root)",
             os.path.join(args.output_dir, f"aralar_mapa_IPP_A_todos_{year}.png"),
             hic_tipo=hic_tipo)
 
@@ -655,8 +655,8 @@ def main():
         ipp_a_pasto[hic_tipo != 1] = np.nan
 
         plot_ipp_spatial(ipp_a_pasto, ref_transform,
-            f"IPP Estrategia A (correccion climatica G6) — Solo pastos Aralar {year}\n"
-            f"Residuo LAI_norm respecto a modelo GAM: s(GDA) + s(P60) + s(SM_root)",
+            f"LPI A estrategia (G6 zuzenketa klimatikoa) — Aralarko larreak soilik {year}\n"
+            f"LAI_norm hondarra GAM ereduarekiko: s(GDA) + s(P60) + s(SM_root)",
             os.path.join(args.output_dir, f"aralar_mapa_IPP_A_pastos_{year}.png"),
             hic_tipo=hic_tipo)
 
@@ -685,8 +685,8 @@ def main():
         ipp_b_pasto = ipp_b.copy()
         ipp_b_pasto[hic_tipo != 1] = np.nan
         plot_ipp_spatial(ipp_b_pasto, ref_transform,
-            f"IPP Estrategia B (pseudo-referencia) — Solo pastos Aralar {year}\n"
-            f"Modelo entrenado sobre pasto remoto + alta pendiente como baseline",
+            f"LPI B estrategia (pseudo-erreferentzia) — Aralarko larreak soilik {year}\n"
+            f"Larre urruna + malda handia oinarri gisa erabilita entrenatutako eredua",
             os.path.join(args.output_dir, f"aralar_mapa_IPP_B_pastos_{year}.png"),
             hic_tipo=hic_tipo)
 
@@ -707,10 +707,10 @@ def main():
             src_d = 'csv'
 
     if ipp_d is not None:
-        nota_src = "(desde GeoTIFF)" if src_d == 'tif' else "(valor zonal del CSV R replicado por pixel)"
+        nota_src = "(GeoTIFFetik)" if src_d == 'tif' else "(R CSVren balio zonala pixelez pixel)"
         plot_ipp_spatial(ipp_d, ref_transform,
-            f"IPP Estrategia D (referencia hayedo) — Aralar {year}\n"
-            f"Anomalia pasto - anomalia hayedo {nota_src}",
+            f"LPI D estrategia (pagadi-erreferentzia) — Aralar {year}\n"
+            f"Larre-anomalia - pagadi-anomalia {nota_src}",
             os.path.join(args.output_dir, f"aralar_mapa_IPP_D_todos_{year}.png"),
             hic_tipo=hic_tipo)
 
@@ -718,8 +718,8 @@ def main():
         ipp_d_pasto[hic_tipo != 1] = np.nan
 
         plot_ipp_spatial(ipp_d_pasto, ref_transform,
-            f"IPP Estrategia D (referencia hayedo) — Solo pastos Aralar {year}\n"
-            f"Anomalia pasto - anomalia hayedo {nota_src}",
+            f"LPI D estrategia (pagadi-erreferentzia) — Aralarko larreak soilik {year}\n"
+            f"Larre-anomalia - pagadi-anomalia {nota_src}",
             os.path.join(args.output_dir, f"aralar_mapa_IPP_D_pastos_{year}.png"),
             hic_tipo=hic_tipo)
     elif args.ipp_d:
@@ -766,8 +766,8 @@ def main():
         ipp_consenso_pasto = ipp_consenso.copy()
         ipp_consenso_pasto[hic_tipo != 1] = np.nan
         plot_ipp_spatial(ipp_consenso_pasto, ref_transform,
-            f"IPP CONSENSO ({n_estr} estrategias) — Solo pastos Aralar {year}\n"
-            f"Media de {'+'.join(estrategias_disp)} (NaN excluidos)",
+            f"LPI ADOSTASUNA ({n_estr} estrategia) — Aralarko larreak soilik {year}\n"
+            f"{'+'.join(estrategias_disp)} batezbestekoa (NaN-ak baztertuta)",
             os.path.join(args.output_dir, f"aralar_mapa_IPP_consenso_pastos_{year}.png"),
             hic_tipo=hic_tipo)
 
@@ -775,7 +775,7 @@ def main():
         concord_pasto = concordancia_n.copy().astype(np.float32)
         concord_pasto[hic_tipo != 1] = np.nan
         # Plot clasificado: 1..n_estr
-        labels = [f"{k}/{n_estr} estrategias" for k in range(1, n_estr+1)]
+        labels = [f"{k}/{n_estr} estrategia" for k in range(1, n_estr+1)]
         # Paleta gradiente del rojo (poca concordancia) al verde (4/4)
         if n_estr == 4:
             colors = ['#d32f2f', '#ff9800', '#fdd835', '#1b5e20']
@@ -786,8 +786,8 @@ def main():
         # Reemplazar NaN por 0 antes del cast para evitar RuntimeWarning
         concord_pasto_int = np.where(np.isnan(concord_pasto), 0, concord_pasto).astype(np.int8)
         plot_classified(concord_pasto_int, ref_transform,
-            f"Concordancia de signo (n={n_estr} estrategias) — Pastos Aralar {year}\n"
-            f"Numero de estrategias que coinciden en signo del IPP",
+            f"Zeinu-bateragarritasuna (n={n_estr} estrategia) — Aralarko larreak {year}\n"
+            f"LPIaren zeinuan bat datozen estrategien kopurua",
             labels, colors,
             os.path.join(args.output_dir, f"aralar_mapa_IPP_concordancia_pastos_{year}.png"),
             hic_tipo=hic_tipo, pasto_only=True)
@@ -820,8 +820,8 @@ def main():
         modelo_vis[modelo_inv == 1] = 1
         modelo_vis[modelo_inv == 3] = 2
         plot_classified(modelo_vis, ref_transform,
-            f"Modelo PROSAIL aplicado por pixel — Aralar {year}\n"
-            f"Pipeline dual: NN_PASTO sobre HIC TIPO=1, NN_HAYEDO sobre HIC TIPO=3",
+            f"Pixelez pixel aplikatutako PROSAIL eredua — Aralar {year}\n"
+            f"Kanalizazio bikoitza: NN_PASTO HIC TIPO=1 gainean, NN_HAYEDO HIC TIPO=3 gainean",
             ['NN_PASTO (HIC 1)', 'NN_HAYEDO (HIC 3)'],
             ['#4caf50', '#7b1fa2'],
             os.path.join(args.output_dir, f"aralar_mapa_modelo_invertido_{year}.png"),

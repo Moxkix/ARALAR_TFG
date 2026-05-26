@@ -91,17 +91,17 @@ for (p in pkgs) {
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 cat("=" , rep("=", 60), "\n")
-cat("  DIAGNÓSTICO PASTORAL — Sierra de Aralar\n")
+cat("  LARRE-DIAGNOSTIKOA — Aralarko mendilerroa\n")
 cat("  PROSAIL-NN + ERA5-Land + SPEI\n")
 cat("=", rep("=", 60), "\n\n")
 
 # ── LAI zonal (Export 1 de GEE) ──
-cat("▸ Leyendo LAI zonal:", LAI_CSV, "\n")
+cat("▸ LAI zonala irakurtzen:", LAI_CSV, "\n")
 lai_wide <- read.csv(LAI_CSV, stringsAsFactors = FALSE) %>%
   mutate(date = as.Date(date)) %>%
   arrange(date)
 
-cat("  Escenas:", nrow(lai_wide), "\n")
+cat("  Eszenak:", nrow(lai_wide), "\n")
 
 # Nombres de zona (z11..z43 = TIPO*10 + anillo)
 zona_map <- c(
@@ -141,7 +141,7 @@ n_total_zona <- NULL
 if (file.exists(ZONAS_CSV)) {
   zonas_char <- read.csv(ZONAS_CSV, stringsAsFactors = FALSE)
   n_total_zona <- zonas_char %>% select(zona_id, zona_name, n_pixels_total = n_pixels)
-  cat("\n  Caracterizacion de zonas:\n")
+  cat("\n  Zonen karakterizazioa:\n")
   print(as.data.frame(zonas_char))
 }
 
@@ -164,35 +164,35 @@ if (!is.null(n_total_zona) && !all(is.na(lai_long$n_pixels))) {
     filter(is.na(coverage_pct) | coverage_pct >= MIN_COVERAGE_PCT)
   n_after <- nrow(lai_long)
   
-  cat("\n  Filtro cobertura (>=", MIN_COVERAGE_PCT, "%):",
-      n_before, "->", n_after, "registros\n")
+  cat("\n  Estaldura iragazkia (>=", MIN_COVERAGE_PCT, "%):",
+      n_before, "->", n_after, "erregistro\n")
   if (n_before > n_after) {
-    cat("  Eliminados", n_before - n_after, "registros con nubes parciales\n")
+    cat("  Ezabatuta:", n_before - n_after, "erregistro hodei partzialekin\n")
   }
 } else {
-  cat("\n  Sin conteo de pixeles — filtro de cobertura no aplicado.\n")
-  cat("  (Ejecutar pipeline v3 de GEE para obtener N_z* en el CSV)\n")
+  cat("\n  Pixel-zenbaketarik gabe — estaldura iragazkia ez da aplikatu.\n")
+  cat("  (GEEko v3 pipeline-a exekutatu N_z* CSVan eskuratzeko)\n")
 }
 
 lai_long <- lai_long %>%
   select(date, year, doy, zona, LAI) %>%
   arrange(zona, date)
 
-cat("  Registros LAI (largo):", nrow(lai_long), "\n")
-cat("  Zonas:", paste(sort(unique(lai_long$zona)), collapse = ", "), "\n")
+cat("  LAI erregistroak (formatu luzea):", nrow(lai_long), "\n")
+cat("  Zonak:", paste(sort(unique(lai_long$zona)), collapse = ", "), "\n")
 
 # ── Clima diario (Export 2 de GEE) ──
-cat("\n▸ Leyendo clima diario:", CLIMA_CSV, "\n")
+cat("\n▸ Klima eguneroa irakurtzen:", CLIMA_CSV, "\n")
 clima <- read.csv(CLIMA_CSV, stringsAsFactors = FALSE) %>%
   mutate(date = as.Date(date)) %>%
   arrange(date)
 
-cat("  Dias:", nrow(clima), "\n")
+cat("  Egunak:", nrow(clima), "\n")
 
 # Calcular variables acumuladas
 has_rad_col <- "Rad_MJ" %in% names(clima)
 if (!has_rad_col) {
-  cat("  AVISO: Rad_MJ no encontrado en CSV — re-ejecutar GEE con pipeline v3\n")
+  cat("  OHARRA: Rad_MJ ez da aurkitu CSV-an — GEE pipeline v3 berriz exekutatu\n")
   clima$Rad_MJ <- NA
 }
 
@@ -210,15 +210,15 @@ clima <- clima %>%
   select(date, P30, P60, T2m_C, GDA, SM_sup, SM_root, Rad7, Rad30)
 
 # ── Join LAI + Clima por fecha ──
-cat("\n▸ Uniendo LAI + clima por fecha...\n")
+cat("\n▸ LAI + klima dataren arabera elkartzen...\n")
 panel <- lai_long %>%
   left_join(clima, by = "date")
 
-cat("  Registros panel:", nrow(panel), "\n")
-cat("  Con P60:", sum(!is.na(panel$P60)), "\n")
+cat("  Panel erregistroak:", nrow(panel), "\n")
+cat("  P60rekin:", sum(!is.na(panel$P60)), "\n")
 
 # Verificar
-cat("  Fechas por zona:\n")
+cat("  Datak zonaka:\n")
 panel %>% count(zona, year) %>%
   pivot_wider(names_from = year, values_from = n, values_fill = 0) %>%
   as.data.frame() %>% print()
@@ -226,14 +226,14 @@ panel %>% count(zona, year) %>%
 # ── SPEI (join por mes) ──
 spei_ok <- FALSE
 if (file.exists(SPEI_CSV)) {
-  cat("\n▸ Leyendo SPEI:", SPEI_CSV, "\n")
+  cat("\n▸ SPEI irakurtzen:", SPEI_CSV, "\n")
   spei <- read.csv(SPEI_CSV, stringsAsFactors = FALSE) %>%
     mutate(date = as.Date(date),
            ym = floor_date(date, "month"))
 
   # Seleccionar columnas SPEI disponibles
   spei_cols <- grep("^SPEI_", names(spei), value = TRUE)
-  cat("  Escalas disponibles:", paste(spei_cols, collapse = ", "), "\n")
+  cat("  Eskala eskuragarriak:", paste(spei_cols, collapse = ", "), "\n")
 
   if (length(spei_cols) > 0) {
     spei_join <- spei %>% select(ym, all_of(spei_cols))
@@ -244,11 +244,11 @@ if (file.exists(SPEI_CSV)) {
       select(-ym)
 
     spei_ok <- TRUE
-    cat("  SPEI unido al panel por mes.\n")
-    cat("  Valores SPEI_3 no-NA:", sum(!is.na(panel$SPEI_3)), "/", nrow(panel), "\n")
+    cat("  SPEI panelarekin hilabeteka elkartuta.\n")
+    cat("  SPEI_3 NA ez diren balioak:", sum(!is.na(panel$SPEI_3)), "/", nrow(panel), "\n")
   }
 } else {
-  cat("\n⚠ SPEI no encontrado (", SPEI_CSV, "). Se omitirán modelos con SPEI.\n")
+  cat("\n⚠ SPEI ez da aurkitu (", SPEI_CSV, "). SPEIdun ereduak baztertuko dira.\n")
 }
 
 # ── Colores por zona ──
@@ -260,13 +260,22 @@ pal_hayedo <- c("hayedo_cercano" = "#1f78b4", "hayedo_intermedio" = "#a6cee3", "
 pal_encinar <- c("encinar_cercano" = "#ff7f00", "encinar_intermedio" = "#ffc966", "encinar_remoto" = "#cab2d6")
 colores <- c(pal_pasto, pal_brezal, pal_hayedo, pal_encinar)
 
+# ── Etiquetas de zonas en euskera (solo display; la columna `zona` se mantiene
+#    intacta para preservar compatibilidad con CSV/index.html/GEE) ──
+nombres_zona <- c(
+  "pasto_cercano"     = "Larrea (hurbila)",   "pasto_intermedio"   = "Larrea (ertaina)",   "pasto_remoto"     = "Larrea (urruna)",
+  "brezal_cercano"    = "Txilardia (hurbila)", "brezal_intermedio" = "Txilardia (ertaina)", "brezal_remoto"    = "Txilardia (urruna)",
+  "hayedo_cercano"    = "Pagadia (hurbila)",   "hayedo_intermedio"= "Pagadia (ertaina)",    "hayedo_remoto"   = "Pagadia (urruna)",
+  "encinar_cercano"   = "Artadia (hurbila)",   "encinar_intermedio"="Artadia (ertaina)",    "encinar_remoto"  = "Artadia (urruna)"
+)
+
 # ── Zonas pastoreadas (para IPP) ──
 zonas_past <- intersect(zonas, ZONAS_PASTO)
 zonas_past <- setdiff(zonas_past, ZONA_REFERENCIA)
-cat("\n  Zona referencia (Estr. B):", ZONA_REFERENCIA, "\n")
-cat("  Zonas pasto para IPP:", paste(zonas_past, collapse = ", "), "\n")
-cat("  Zonas brezal:", paste(intersect(zonas, ZONAS_BREZAL), collapse = ", "), "\n")
-cat("  Zonas hayedo:", paste(intersect(zonas, ZONAS_HAYEDO), collapse = ", "), "\n")
+cat("\n  Erreferentzia-zona (B estr.):", ZONA_REFERENCIA, "\n")
+cat("  Larre-zonak LPI kalkulatzeko:", paste(zonas_past, collapse = ", "), "\n")
+cat("  Txilardi-zonak:", paste(intersect(zonas, ZONAS_BREZAL), collapse = ", "), "\n")
+cat("  Pagadi-zonak:", paste(intersect(zonas, ZONAS_HAYEDO), collapse = ", "), "\n")
 
 
 # zonas_char ya leído en sección 2 (filtro cobertura)
@@ -279,7 +288,7 @@ cat("  Zonas hayedo:", paste(intersect(zonas, ZONAS_HAYEDO), collapse = ", "), "
 # vs pasto LAI~1.5). Cada zona se escala a [0,1] por su máximo anual.
 # El modelo climático trabaja sobre LAI_norm → residuos comparables.
 
-cat("\n▸ Normalizando LAI por zona-año...\n")
+cat("\n▸ LAI zona-urteka normalizatzen...\n")
 
 panel <- panel %>%
   group_by(zona, year) %>%
@@ -289,7 +298,7 @@ panel <- panel %>%
   ) %>%
   ungroup()
 
-cat("  LAI_norm rango: [", round(min(panel$LAI_norm, na.rm = TRUE), 3), ",",
+cat("  LAI_norm tartea: [", round(min(panel$LAI_norm, na.rm = TRUE), 3), ",",
     round(max(panel$LAI_norm, na.rm = TRUE), 3), "]\n")
 
 # Resumen de normalización
@@ -308,7 +317,7 @@ panel %>%
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 cat("\n\n", rep("=", 60), "\n")
-cat("  NIVEL 1 — Exploración\n")
+cat("  1. MAILA — Esplorazioa\n")
 cat(rep("=", 60), "\n")
 
 # Estadísticas por zona y año
@@ -329,11 +338,11 @@ print(as.data.frame(resumen))
 p_series <- ggplot(panel, aes(x = doy, y = LAI, color = zona)) +
   geom_line(linewidth = 0.8) +
   geom_point(size = 2.5) +
-  scale_color_manual(values = colores) +
+  scale_color_manual(values = colores, labels = nombres_zona) +
   facet_wrap(~year, scales = "free_x") +
-  labs(title = "LAI PROSAIL-NN por zona — Aralar",
-       subtitle = "Facetado por año | Fuente: Sentinel-2 invertido con NN",
-       x = "Día del año", y = "LAI (m\u00b2/m\u00b2)", color = NULL) +
+  labs(title = "LAI PROSAIL-NN zonaka — Aralar",
+       subtitle = "Urteka faketatua | Iturria: Sentinel-2 NN-rekin alderantzikatua",
+       x = "Urteko eguna", y = "LAI (m\u00b2/m\u00b2)", color = NULL) +
   theme_minimal(base_size = 12) +
   theme(plot.title = element_text(face = "bold"),
         legend.position = "top",
@@ -347,7 +356,7 @@ clim_vars <- c("P30", "P60", "T2m_C", "GDA", "SM_sup", "SM_root", "Rad7", "Rad30
 if (spei_ok) clim_vars <- c(clim_vars, "SPEI_3")
 clim_present <- clim_vars[clim_vars %in% names(panel)]
 
-cat("\n━━━ Correlaciones LAI ~ clima ━━━\n")
+cat("\n━━━ LAI ~ klima korrelazioak ━━━\n")
 cor_mat <- panel %>%
   select(LAI, all_of(clim_present)) %>%
   cor(use = "pairwise.complete.obs")
@@ -377,11 +386,11 @@ print(round(cor_mat, 3))
 #      la atribuible a presión ganadera.
 
 cat("\n\n", rep("=", 60), "\n")
-cat("  3.5. HAYEDO como referencia climática sin pastoreo\n")
+cat("  3.5. PAGADIA larretu gabeko klima-erreferentzia gisa\n")
 cat(rep("=", 60), "\n")
 
 hayedo_zonas_pres <- intersect(zonas, ZONAS_HAYEDO)
-cat("\nZonas de hayedo disponibles:", paste(hayedo_zonas_pres, collapse = ", "), "\n")
+cat("\nPagadi-zona eskuragarriak:", paste(hayedo_zonas_pres, collapse = ", "), "\n")
 
 if (length(hayedo_zonas_pres) >= 1) {
   # 1. Serie temporal del hayedo — media simple por fecha de las 3 zonas
@@ -399,8 +408,8 @@ if (length(hayedo_zonas_pres) >= 1) {
     ) %>%
     filter(!is.na(LAI_hayedo), is.finite(LAI_hayedo))
 
-  cat("Serie hayedo:", nrow(hayedo_serie), "fechas\n")
-  cat("LAI hayedo rango:", round(min(hayedo_serie$LAI_hayedo), 2),
+  cat("Pagadi seriea:", nrow(hayedo_serie), "data\n")
+  cat("LAI pagadi tartea:", round(min(hayedo_serie$LAI_hayedo), 2),
       "—", round(max(hayedo_serie$LAI_hayedo), 2), "\n")
 
   # 2. Normalización: escalar por el máximo anual del hayedo
@@ -423,20 +432,20 @@ if (length(hayedo_zonas_pres) >= 1) {
           LAI_hayedo_anom = LAI_hayedo_norm - LAI_hayedo_norm_pheno
         )
       hayedo_pheno_ok <- TRUE
-      cat("Fenologia media hayedo ajustada: R2 =",
+      cat("Pagadi fenologia ertaina doitua: R2 =",
           round(summary(pheno_mod)$r.sq, 3),
           " | dev.expl =", round(summary(pheno_mod)$dev.expl * 100, 1), "%\n")
-      cat("Anomalia hayedo rango:",
+      cat("Pagadi anomalia tartea:",
           round(min(hayedo_serie$LAI_hayedo_anom, na.rm = TRUE), 3),
           "—",
           round(max(hayedo_serie$LAI_hayedo_anom, na.rm = TRUE), 3), "\n")
     }, error = function(e) {
-      cat("  ! No se pudo ajustar fenologia hayedo:", e$message, "\n")
+      cat("  ! Ezin izan da pagadi fenologia doitu:", e$message, "\n")
     })
   }
 
   if (!hayedo_pheno_ok) {
-    cat("  (Fenologia media no disponible; se omite Estrategia D)\n")
+    cat("  (Fenologia ertaina ez dago eskuragarri; D estrategia baztertzen da)\n")
     hayedo_serie$LAI_hayedo_anom <- NA_real_
     hayedo_serie$LAI_hayedo_norm_pheno <- NA_real_
   }
@@ -452,12 +461,12 @@ if (length(hayedo_zonas_pres) >= 1) {
 
   # Export de la serie hayedo para inspección
   write.csv(hayedo_serie, "hayedo_serie_referencia.csv", row.names = FALSE)
-  cat("\n✓ Exportado: hayedo_serie_referencia.csv\n")
+  cat("\n✓ Esportatua: hayedo_serie_referencia.csv\n")
 
   hayedo_disponible <- TRUE
 
 } else {
-  cat("⚠ No hay zonas de hayedo disponibles. Se omitira Estrategia D.\n")
+  cat("⚠ Ez dago pagadi-zonarik eskuragarri. D estrategia baztertuko da.\n")
   panel$LAI_hayedo       <- NA_real_
   panel$LAI_hayedo_norm  <- NA_real_
   panel$LAI_hayedo_anom  <- NA_real_
@@ -470,7 +479,7 @@ if (length(hayedo_zonas_pres) >= 1) {
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 cat("\n\n", rep("=", 60), "\n")
-cat("  NIVEL 2 — Modelos climaticos (LM + GAM)\n")
+cat("  2. MAILA — Klima-ereduak (LM + GAM)\n")
 cat(rep("=", 60), "\n")
 
 lai_aoi <- panel %>%
@@ -485,7 +494,7 @@ lai_aoi <- panel %>%
 lai_aoi <- lai_aoi %>% mutate(GDA2 = GDA^2)
 panel <- panel %>% mutate(GDA2 = GDA^2)
 
-cat("Observaciones AOI-media:", nrow(lai_aoi), "\n")
+cat("AOI-batezbesteko behaketak:", nrow(lai_aoi), "\n")
 
 # ── Función auxiliar para extraer métricas de lm o gam ──
 get_metrics <- function(m) {
@@ -525,54 +534,54 @@ if (has_spei) d_spei <- d_full %>% filter(!is.na(SPEI_3)) else d_spei <- d_full
 if (has_rad)  d_rad  <- d_full %>% filter(!is.na(Rad7))  else d_rad  <- d_full
 
 # --- LINEALES ---
-cat("\n  Ajustando modelos lineales...\n")
+cat("\n  Eredu linealak doitzen...\n")
 
 tryCatch({
   models[["L1"]] <- lm(LAI_aoi ~ P60 + GDA, data = d_full)
   labels[["L1"]] <- "LM: P60 + GDA"
-}, error = function(e) cat("  L1 fallo\n"))
+}, error = function(e) cat("  L1 huts egin du\n"))
 
 tryCatch({
   models[["L2"]] <- lm(LAI_aoi ~ P60 + GDA + GDA2, data = d_full)
   labels[["L2"]] <- "LM: P60 + GDA + GDA2"
-}, error = function(e) cat("  L2 fallo\n"))
+}, error = function(e) cat("  L2 huts egin du\n"))
 
 if (has_spei) tryCatch({
   models[["L3"]] <- lm(LAI_aoi ~ P60 + GDA + SPEI_3, data = d_spei)
   labels[["L3"]] <- "LM: P60 + GDA + SPEI_3"
-}, error = function(e) cat("  L3 fallo\n"))
+}, error = function(e) cat("  L3 huts egin du\n"))
 
 if (has_rad) tryCatch({
   models[["L4"]] <- lm(LAI_aoi ~ P60 + GDA + Rad7, data = d_rad)
   labels[["L4"]] <- "LM: P60 + GDA + Rad7"
-}, error = function(e) cat("  L4 fallo\n"))
+}, error = function(e) cat("  L4 huts egin du\n"))
 
 if (has_spei && has_rad) tryCatch({
   models[["L5"]] <- lm(LAI_aoi ~ P60 + GDA + SPEI_3 + Rad7, data = d_spei %>% filter(!is.na(Rad7)))
   labels[["L5"]] <- "LM: P60 + GDA + SPEI_3 + Rad7"
-}, error = function(e) cat("  L5 fallo\n"))
+}, error = function(e) cat("  L5 huts egin du\n"))
 
 # --- GAM con splines suavizados ---
-cat("  Ajustando modelos GAM...\n")
+cat("  GAM ereduak doitzen...\n")
 
 # G1: s(GDA) + s(P60) — fenología + precipitación no lineales
 tryCatch({
   models[["G1"]] <- gam(LAI_aoi ~ s(GDA, k = 5) + s(P60, k = 5), data = d_full)
   labels[["G1"]] <- "GAM: s(GDA) + s(P60)"
-}, error = function(e) cat("  G1 fallo:", e$message, "\n"))
+}, error = function(e) cat("  G1 huts egin du:", e$message, "\n"))
 
 # G2: s(GDA) + s(P60) + SPEI_3
 if (has_spei) tryCatch({
   models[["G2"]] <- gam(LAI_aoi ~ s(GDA, k = 5) + s(P60, k = 5) + SPEI_3, data = d_spei)
   labels[["G2"]] <- "GAM: s(GDA) + s(P60) + SPEI_3"
-}, error = function(e) cat("  G2 fallo\n"))
+}, error = function(e) cat("  G2 huts egin du\n"))
 
 # G3: s(GDA) + s(P60) + s(Rad7)
 if (has_rad) tryCatch({
   models[["G3"]] <- gam(LAI_aoi ~ s(GDA, k = 5) + s(P60, k = 5) + s(Rad7, k = 5),
                         data = d_rad)
   labels[["G3"]] <- "GAM: s(GDA) + s(P60) + s(Rad7)"
-}, error = function(e) cat("  G3 fallo\n"))
+}, error = function(e) cat("  G3 huts egin du\n"))
 
 # G4: s(GDA) + s(P60) + SPEI_3 + s(Rad7) — modelo completo
 if (has_spei && has_rad) tryCatch({
@@ -580,7 +589,7 @@ if (has_spei && has_rad) tryCatch({
   models[["G4"]] <- gam(LAI_aoi ~ s(GDA, k = 5) + s(P60, k = 5) + SPEI_3 + s(Rad7, k = 5),
                         data = d_all)
   labels[["G4"]] <- "GAM: s(GDA) + s(P60) + SPEI_3 + s(Rad7)"
-}, error = function(e) cat("  G4 fallo\n"))
+}, error = function(e) cat("  G4 huts egin du\n"))
 
 # G5: s(GDA) + P60 + SPEI_3 + Rad7 — solo GDA no lineal
 if (has_spei && has_rad) tryCatch({
@@ -588,14 +597,14 @@ if (has_spei && has_rad) tryCatch({
   models[["G5"]] <- gam(LAI_aoi ~ s(GDA, k = 5) + P60 + SPEI_3 + Rad7,
                         data = d_all)
   labels[["G5"]] <- "GAM: s(GDA) + P60 + SPEI_3 + Rad7"
-}, error = function(e) cat("  G5 fallo\n"))
+}, error = function(e) cat("  G5 huts egin du\n"))
 
 # G6: s(GDA) + s(P60) + s(SM_root)
 if ("SM_root" %in% names(d_full) && sum(!is.na(d_full$SM_root)) >= 10) tryCatch({
   models[["G6"]] <- gam(LAI_aoi ~ s(GDA, k = 5) + s(P60, k = 5) + s(SM_root, k = 5),
                         data = d_full %>% filter(!is.na(SM_root)))
   labels[["G6"]] <- "GAM: s(GDA) + s(P60) + s(SM_root)"
-}, error = function(e) cat("  G6 fallo\n"))
+}, error = function(e) cat("  G6 huts egin du\n"))
 
 # G6m: s(GDA) + s(P60) + s(SM_root) + te(GDA, P60)
 # Interaccion tensorial entre calor acumulado y precipitacion reciente.
@@ -611,12 +620,12 @@ if ("SM_root" %in% names(d_full) && sum(!is.na(d_full$SM_root)) >= 10) {
                   te(GDA, P60, k = c(4, 4)),
         data = d_sm, method = "REML"),
     error = function(e) {
-      cat("  G6m con k=c(4,4) fallo, reintentando con k=c(3,3)\n")
+      cat("  G6m k=c(4,4) huts egin du, k=c(3,3)rekin saiatzen\n")
       tryCatch(
         gam(LAI_aoi ~ s(GDA, k = 5) + s(P60, k = 5) + s(SM_root, k = 5) +
                       te(GDA, P60, k = c(3, 3)),
             data = d_sm, method = "REML"),
-        error = function(e2) { cat("  G6m fallo definitivamente\n"); NULL }
+        error = function(e2) { cat("  G6m behin betiko huts egin du\n"); NULL }
       )
     }
   )
@@ -627,7 +636,7 @@ if ("SM_root" %in% names(d_full) && sum(!is.na(d_full$SM_root)) >= 10) {
 }
 
 # ── Comparar todos los modelos ──
-cat("\n  Modelos ajustados:", length(models), "\n")
+cat("\n  Doitutako ereduak:", length(models), "\n")
 
 if (length(models) > 0) {
   metrics_list <- lapply(models, get_metrics)
@@ -662,14 +671,14 @@ if (length(models) > 0) {
   ) %>% arrange(AIC)
   
   cat("\n", rep("=", 85), "\n")
-  cat("  COMPARACION DE MODELOS (LM + GAM)\n")
+  cat("  EREDUEN KONPARAZIOA (LM + GAM)\n")
   cat(rep("=", 85), "\n\n")
   print(as.data.frame(model_comp))
   write.csv(model_comp, "comparacion_modelos.csv", row.names = FALSE)
-  
+
   # ── Significancia detallada de TODOS los modelos ──
   cat("\n", rep("-", 85), "\n")
-  cat("  SIGNIFICANCIA DETALLADA POR MODELO\n")
+  cat("  EREDUEN ESANGURATASUN XEHATUA\n")
   cat(rep("-", 85), "\n")
   
   signif_rows <- list()
@@ -683,7 +692,7 @@ if (length(models) > 0) {
       
       # Términos paramétricos (incluyendo intercepto)
       if (nrow(s$p.table) > 0) {
-        cat("  Terminos parametricos:\n")
+        cat("  Termino parametrikoak:\n")
         for (j in 1:nrow(s$p.table)) {
           pval <- s$p.table[j, "Pr(>|t|)"]
           sig <- ifelse(pval < 0.001, "***", ifelse(pval < 0.01, "**",
@@ -703,7 +712,7 @@ if (length(models) > 0) {
       
       # Smooth terms
       if (nrow(s$s.table) > 0) {
-        cat("  Terminos suavizados (splines):\n")
+        cat("  Termino leunduak (splines):\n")
         for (j in 1:nrow(s$s.table)) {
           pval <- s$s.table[j, "p-value"]
           sig <- ifelse(pval < 0.001, "***", ifelse(pval < 0.01, "**",
@@ -756,10 +765,10 @@ if (length(models) > 0) {
   if (length(signif_rows) > 0) {
     signif_table <- do.call(rbind, signif_rows)
     write.csv(signif_table, "significancia_modelos.csv", row.names = FALSE)
-    cat("\n  -> Tabla exportada: significancia_modelos.csv\n")
+    cat("\n  -> Taula esportatua: significancia_modelos.csv\n")
   }
-  
-  cat("\n  Codigos: *** p<0.001  ** p<0.01  * p<0.05  . p<0.1  ns no significativo\n")
+
+  cat("\n  Kodeak: *** p<0.001  ** p<0.01  * p<0.05  . p<0.1  ns ez esanguratsua\n")
   
   # Seleccionar el mejor
   # Regla de parsimonia: si hay modelos dentro de ΔAIC < 2 del mejor,
@@ -770,7 +779,7 @@ if (length(models) > 0) {
     # contar términos en la fórmula como proxy de complejidad
     candidatos$n_terminos <- stringr::str_count(candidatos$formula, "\\+") + 1
     candidatos <- candidatos %>% arrange(n_terminos, AIC)
-    cat(sprintf("\n  ΔAIC<2: %d modelos empatados; seleccionado el mas parsimonioso (%s)\n",
+    cat(sprintf("\n  ΔAIC<2: %d eredu berdinduta; parsimoniatsuena hautatu da (%s)\n",
                 nrow(candidatos), candidatos$id[1]))
   }
   best_id <- candidatos$id[1]
@@ -782,8 +791,8 @@ if (length(models) > 0) {
   uses_rad  <- grepl("Rad", best_label)
   
   cat("\n", rep("=", 85), "\n")
-  cat("  MODELO SELECCIONADO:", best_label, "\n")
-  cat("  Tipo:", best_tipo, "| R2:", model_comp$R2[1],
+  cat("  HAUTATUTAKO EREDUA:", best_label, "\n")
+  cat("  Mota:", best_tipo, "| R2:", model_comp$R2[1],
       "| Dev.expl:", model_comp$dev_expl[1],
       "| AIC:", model_comp$AIC[1],
       "| p:", model_comp$p_global[1], "\n")
@@ -796,7 +805,7 @@ if (length(models) > 0) {
   tiene_tensor <- grepl("te\\(", best_label)
 
   if (tiene_tensor) {
-    cat("\n  Modelo con termino tensorial detectado: chequeando hull convexo...\n")
+    cat("\n  Termino tentsorialdun eredua detektatuta: oskol konbexua egiaztatzen...\n")
     rng_gda_train <- range(best_mod$model$GDA, na.rm = TRUE)
     rng_p60_train <- range(best_mod$model$P60, na.rm = TRUE)
 
@@ -811,11 +820,11 @@ if (length(models) > 0) {
     n_fuera <- sum(gam_export$fuera_hull, na.rm = TRUE)
     n_total <- nrow(gam_export)
     if (n_fuera > 0) {
-      cat(sprintf("  AVISO: %d de %d fechas (%.1f%%) fuera del hull (GDA, P60).\n",
+      cat(sprintf("  OHARRA: %d data %d-tik (%.1f%%) oskoletik kanpo (GDA, P60).\n",
                   n_fuera, n_total, 100 * n_fuera / n_total))
-      cat("         Marcadas como NA y excluidas del CSV para GEE.\n")
+      cat("         NA gisa markatuta eta GEErako CSVtik kanpo utziak.\n")
     } else {
-      cat("  Todas las fechas dentro del hull de entrenamiento.\n")
+      cat("  Data guztiak entrenamendu-oskolaren barruan.\n")
     }
 
     gam_export <- gam_export %>%
@@ -834,14 +843,14 @@ if (length(models) > 0) {
   }
 
   write.csv(gam_export, "gam_predicciones_fecha.csv", row.names = FALSE)
-  cat("\n  -> Exportado: gam_predicciones_fecha.csv (", nrow(gam_export), " fechas)\n")
-  cat("     Subir como asset a GEE para calcular IPP espacializado Estrategia A\n")
+  cat("\n  -> Esportatua: gam_predicciones_fecha.csv (", nrow(gam_export), " data)\n")
+  cat("     GEEn aktibora igo A estrategiaren LPI espazializatua kalkulatzeko\n")
 
   # ── Chequeo anti-absorcion: si el modelo tiene termino estacional, verificar
   # que no esta absorbiendo la senal de pastoreo diferencial entre anillos ──
   tiene_estacional <- grepl("doy|month|season", best_label, ignore.case = TRUE)
   if (tiene_estacional && exists("panel_zonal")) {
-    cat("\n  [!] Modelo con termino estacional: verificando diferencial cercano-remoto...\n")
+    cat("\n  [!] Sasoiko terminodun eredua: hurbil-urrun diferentziala egiaztatzen...\n")
     panel_ago <- panel_zonal %>%
       filter(grepl("pasto", zona), month(date) == 8, !is.na(LAI_norm)) %>%
       mutate(anillo = case_when(
@@ -856,19 +865,19 @@ if (length(models) > 0) {
       if (all(c("cer", "rem") %in% medias$anillo)) {
         dif <- abs(medias$res[medias$anillo == "cer"] -
                    medias$res[medias$anillo == "rem"])
-        cat(sprintf("      Diferencial |cercano - remoto| en agosto: %.3f\n", dif))
+        cat(sprintf("      |hurbila - urruna| diferentziala abuztuan: %.3f\n", dif))
         if (dif < 0.08) {
-          cat("      [!!] DIFERENCIAL COLAPSADO. El modelo absorbe pastoreo diferencial.\n")
-          cat("           La capacidad diagnostica del IPP puede estar comprometida.\n")
+          cat("      [!!] DIFERENTZIALA KOLAPSATUTA. Ereduak larratze-diferentziala xurgatzen du.\n")
+          cat("           LPIren diagnostiko-ahalmena kaltetuta egon daiteke.\n")
         } else {
-          cat("      [ok] Diferencial preservado.\n")
+          cat("      [ok] Diferentziala mantenduta.\n")
         }
       }
     }
   }
   
 } else {
-  stop("No se pudo ajustar ningun modelo.")
+  stop("Ezin izan da inolako eredurik doitu.")
 }
 
 
@@ -877,7 +886,7 @@ if (length(models) > 0) {
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 cat("\n\n", rep("=", 60), "\n")
-cat("  ESTRATEGIA A — Modelo climatico sobre LAI normalizado\n")
+cat("  A ESTRATEGIA — Klima-eredua LAI normalizatuaren gainean\n")
 cat(rep("=", 60), "\n")
 
 panel_A <- panel
@@ -894,8 +903,8 @@ panel_A <- panel_A %>%
 
 write.csv(panel_A, "panel_A_con_residuos.csv", row.names = FALSE)
 
-cat("Predicciones con residuo A:", nrow(panel_A), "registros\n")
-cat("Residuo normalizado medio:", round(mean(panel_A$LAI_norm_res_A, na.rm = TRUE), 4), "\n")
+cat("A hondarrarekin proiekzioak:", nrow(panel_A), "erregistro\n")
+cat("Batezbesteko hondar normalizatua:", round(mean(panel_A$LAI_norm_res_A, na.rm = TRUE), 4), "\n")
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -903,11 +912,11 @@ cat("Residuo normalizado medio:", round(mean(panel_A$LAI_norm_res_A, na.rm = TRU
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 cat("\n\n", rep("=", 60), "\n")
-cat("  ESTRATEGIA B — Pseudo-referencia (", ZONA_REFERENCIA, ")\n")
+cat("  B ESTRATEGIA — Pseudo-erreferentzia (", ZONA_REFERENCIA, ")\n")
 cat(rep("=", 60), "\n")
 
 ref_data <- panel %>% filter(zona == ZONA_REFERENCIA, !is.na(P60))
-cat("Datos referencia:", nrow(ref_data), "obs\n")
+cat("Erreferentzia datuak:", nrow(ref_data), "beh\n")
 
 if (nrow(ref_data) >= 10) {
   # Modelo base LM
@@ -929,11 +938,11 @@ if (nrow(ref_data) >= 10) {
     mod_B_gam <- gam(LAI_norm ~ s(GDA, k = 5) + s(P60, k = 5), data = ref_data)
     if (AIC(mod_B_gam) < AIC(mod_B) - 2) {
       mod_B <- mod_B_gam
-      cat("  Estrategia B: GAM seleccionado (mejor AIC)\n")
+      cat("  B estrategia: GAM hautatuta (AIC hobea)\n")
     }
   }, error = function(e) {})
 
-  cat("Modelo B:", ifelse(inherits(mod_B, "gam"), "GAM", "LM"), "\n")
+  cat("B eredua:", ifelse(inherits(mod_B, "gam"), "GAM", "LM"), "\n")
   if (inherits(mod_B, "gam")) {
     cat("  R2 =", round(summary(mod_B)$r.sq, 3), "\n")
   } else {
@@ -948,7 +957,7 @@ if (nrow(ref_data) >= 10) {
       LAI_res_B  = LAI - LAI_clim_B
     )
 } else {
-  cat("Insuficientes datos para Estrategia B. Se usara solo A y C.\n")
+  cat("Datu nahikorik ez B estrategiarako. A eta C bakarrik erabiliko dira.\n")
   panel_A$LAI_norm_clim_B <- NA
   panel_A$LAI_norm_res_B  <- NA
   panel_A$LAI_clim_B <- NA
@@ -961,7 +970,7 @@ if (nrow(ref_data) >= 10) {
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 cat("\n\n", rep("=", 60), "\n")
-cat("  ESTRATEGIA C — Anomalía espacial\n")
+cat("  C ESTRATEGIA — Anomalia espaziala\n")
 cat(rep("=", 60), "\n")
 
 panel_A <- panel_A %>%
@@ -995,14 +1004,14 @@ panel_A <- panel_A %>%
 # Complementa A/B/C sin depender de ajustes estadísticos climáticos.
 
 cat("\n\n", rep("=", 60), "\n")
-cat("  ESTRATEGIA D — Referencia hayedo (sin pastoreo)\n")
+cat("  D ESTRATEGIA — Pagadi-erreferentzia (larretu gabea)\n")
 cat(rep("=", 60), "\n")
 
 if (hayedo_disponible && "LAI_hayedo_anom" %in% names(panel_A)) {
 
   # 1. Fenología media multianual del pasto POR ZONA
   #    Ajustamos un GAM suave por zona para tener la curva típica de cada una.
-  cat("\n  Ajustando fenologia media por zona para anomalias pasto...\n")
+  cat("\n  Larrearen anomalietarako batezbesteko fenologia zonaka doitzen...\n")
 
   panel_A <- panel_A %>%
     group_by(zona) %>%
@@ -1032,19 +1041,19 @@ if (hayedo_disponible && "LAI_hayedo_anom" %in% names(panel_A)) {
     )
 
   n_validos_D <- sum(!is.na(panel_A$LAI_norm_res_D))
-  cat("Filas con IPP_D calculable:", n_validos_D, "/", nrow(panel_A), "\n")
+  cat("LPI_D kalkulagarriak diren errenkadak:", n_validos_D, "/", nrow(panel_A), "\n")
   if (n_validos_D > 0) {
-    cat("Rango LAI_norm_res_D (anomalia pasto - anomalia hayedo):",
+    cat("LAI_norm_res_D tartea (larre-anomalia - pagadi-anomalia):",
         round(min(panel_A$LAI_norm_res_D, na.rm = TRUE), 3),
         "—",
         round(max(panel_A$LAI_norm_res_D, na.rm = TRUE), 3), "\n")
-    cat("Rango LAI_norm_anom (pasto vs su fenologia media):",
+    cat("LAI_norm_anom tartea (larrea vs bere batezbesteko fenologia):",
         round(min(panel_A$LAI_norm_anom, na.rm = TRUE), 3),
         "—",
         round(max(panel_A$LAI_norm_anom, na.rm = TRUE), 3), "\n")
   }
 } else {
-  cat("Hayedo no disponible: se omite Estrategia D.\n")
+  cat("Pagadia ez dago eskuragarri: D estrategia baztertzen da.\n")
   panel_A$LAI_norm_anom  <- NA_real_
   panel_A$LAI_norm_pheno <- NA_real_
   panel_A$LAI_norm_res_D <- NA_real_
@@ -1057,19 +1066,19 @@ if (hayedo_disponible && "LAI_hayedo_anom" %in% names(panel_A)) {
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 cat("\n\n", rep("=", 60), "\n")
-cat("  NIVEL 3 — DIAGNÓSTICO INTEGRADO\n")
+cat("  3. MAILA — DIAGNOSTIKO INTEGRATUA\n")
 cat(rep("=", 60), "\n")
 
 # Función clasificación IPP
 clasificar_ipp <- function(ipp) {
   case_when(
-    ipp < IPP_THRESHOLDS["severo_neg"]   ~ "Sobrepastoreo severo",
-    ipp < IPP_THRESHOLDS["moderado_neg"] ~ "Sobrepastoreo moderado",
-    ipp < IPP_THRESHOLDS["leve_neg"]     ~ "Sobrepastoreo leve",
-    ipp <= IPP_THRESHOLDS["leve_pos"]    ~ "Equilibrio pastoral",
-    ipp <= IPP_THRESHOLDS["moderado_pos"]~ "Infrautilizacion leve",
-    ipp <= IPP_THRESHOLDS["severo_pos"]  ~ "Infrautilizacion moderada",
-    TRUE                                  ~ "Matorralizacion / abandono"
+    ipp < IPP_THRESHOLDS["severo_neg"]   ~ "Gainlarratze larria",
+    ipp < IPP_THRESHOLDS["moderado_neg"] ~ "Gainlarratze ertaina",
+    ipp < IPP_THRESHOLDS["leve_neg"]     ~ "Gainlarratze arina",
+    ipp <= IPP_THRESHOLDS["leve_pos"]    ~ "Larre-oreka",
+    ipp <= IPP_THRESHOLDS["moderado_pos"]~ "Azpierabilera arina",
+    ipp <= IPP_THRESHOLDS["severo_pos"]  ~ "Azpierabilera ertaina",
+    TRUE                                  ~ "Sastrakatzea / utzikeria"
   )
 }
 
@@ -1126,7 +1135,7 @@ compute_ipp <- function(df, periodo_label) {
         ifelse(sign(IPP_A) == sign(IPP_C) &
                (is.na(IPP_B) | sign(IPP_A) == sign(IPP_B)) &
                (is.na(IPP_D) | sign(IPP_A) == sign(IPP_D)),
-               "Alta", "Baja"),
+               "Handia", "Txikia"),
         "N/A"
       )
     )
@@ -1146,14 +1155,14 @@ diag_anual <- bind_rows(
 diag_all <- bind_rows(diag_global, diag_anual) %>%
   arrange(periodo, zona)
 
-cat("\n━━━ DIAGNÓSTICO POR ZONA Y PERÍODO ━━━\n")
+cat("\n━━━ DIAGNOSTIKOA ZONA ETA EPEKA ━━━\n")
 print(as.data.frame(diag_all %>%
   select(periodo, zona, n, LAI_medio, LAI_norm_medio,
          IPP_A, IPP_B, IPP_C, IPP_D, IPP_consenso,
          diagnostico, concordancia, concordancia_n)))
 
 write.csv(diag_all, "diagnostico_pastoral.csv", row.names = FALSE)
-cat("\n✓ Exportado: diagnostico_pastoral.csv\n")
+cat("\n✓ Esportatua: diagnostico_pastoral.csv\n")
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1161,7 +1170,7 @@ cat("\n✓ Exportado: diagnostico_pastoral.csv\n")
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 cat("\n\n", rep("=", 60), "\n")
-cat("  GRÁFICOS\n")
+cat("  GRAFIKOAK\n")
 cat(rep("=", 60), "\n")
 
 # ── 9a. LAI observado vs. esperado (Estrategia A) por zona, facetado ──
@@ -1177,8 +1186,8 @@ for (z in zonas) {
     geom_line(aes(y = LAI), color = colores[z], linewidth = 1.1) +
     geom_point(aes(y = LAI), color = colores[z], size = 3) +
     facet_wrap(~year, scales = "free_x") +
-    labs(title = paste0(z, ": LAI observado vs. esperado (Estr. A)"),
-         subtitle = paste0("Modelo: ", best_label, " | Banda gris: \u00b1", TOLERANCIA*100, "%"),
+    labs(title = paste0(nombres_zona[z], ": LAI behatua vs. itxarondakoa (A estr.)"),
+         subtitle = paste0("Eredua: ", best_label, " | Banda grisa: \u00b1", TOLERANCIA*100, "%"),
          y = "LAI (m\u00b2/m\u00b2)", x = NULL) +
     theme_minimal(base_size = 12) +
     theme(plot.title = element_text(face = "bold"))
@@ -1188,8 +1197,8 @@ for (z in zonas) {
     geom_hline(yintercept = 0) +
     scale_fill_manual(values = c("TRUE" = "#4daf4a", "FALSE" = "#e41a1c")) +
     facet_wrap(~year, scales = "free_x") +
-    labs(title = paste0("Residuo LAI: ", z),
-         y = "LAI residual", x = "Fecha") +
+    labs(title = paste0("LAI hondarra: ", nombres_zona[z]),
+         y = "LAI hondarra", x = "Data") +
     theme_minimal(base_size = 12)
 
   combined <- p_obs / p_res
@@ -1201,10 +1210,10 @@ for (z in zonas) {
 p_C <- ggplot(panel_A, aes(x = date, y = LAI_anomalia, fill = zona)) +
   geom_col(position = position_dodge(width = 6), width = 5) +
   geom_hline(yintercept = 0) +
-  scale_fill_manual(values = colores) +
+  scale_fill_manual(values = colores, labels = nombres_zona) +
   facet_wrap(~year, scales = "free_x") +
-  labs(title = "Estrategia C: Anomalia LAI respecto a mediana AOI",
-       subtitle = "Bajo mediana = mas presion | Sobre mediana = menos presion",
+  labs(title = "C estrategia: LAI anomalia AOI medianarekiko",
+       subtitle = "Medianatik behera = presio handiagoa | Medianatik gora = presio txikiagoa",
        y = "LAI - mediana(LAI)", x = NULL, fill = NULL) +
   theme_minimal(base_size = 12) +
   theme(plot.title = element_text(face = "bold"), legend.position = "top")
@@ -1224,10 +1233,11 @@ p_diag <- ggplot(diag_global, aes(x = reorder(zona, IPP_consenso),
             hjust = ifelse(diag_global$IPP_consenso < 0, 1.05, -0.05),
             size = 3.5, fontface = "bold") +
   scale_fill_manual(values = c("TRUE" = "#c44e52", "FALSE" = "#2b8c2b")) +
+  scale_x_discrete(labels = nombres_zona) +
   coord_flip() +
-  labs(title = "Diagnostico pastoral integrado — Aralar (Global)",
-       subtitle = "IPP consenso = media(Estr. A, B, C)",
-       x = NULL, y = "IPP (Indice de Presion Pastoral)") +
+  labs(title = "Larre-diagnostiko integratua — Aralar (Globala)",
+       subtitle = "LPI adostasuna = batezbestekoa(A, B, C, D estr.)",
+       x = NULL, y = "LPI (Larre-Presio Indizea)") +
   theme_minimal(base_size = 13) +
   theme(plot.title = element_text(face = "bold", size = 14))
 
@@ -1249,11 +1259,11 @@ if (nrow(diag_years) > 0 && length(unique(diag_years$year)) > 1) {
     geom_line(linewidth = 1) +
     geom_point(size = 4) +
     geom_text(aes(label = round(IPP_consenso, 2)), vjust = -1, size = 3) +
-    scale_color_manual(values = colores) +
+    scale_color_manual(values = colores, labels = nombres_zona) +
     scale_x_continuous(breaks = unique(diag_years$year)) +
-    labs(title = "Evolucion interanual del IPP — Aralar",
-         subtitle = "Banda verde = equilibrio (\u00b10.05) | Lineas punteadas = severo (\u00b10.20)",
-         x = "Ano", y = "IPP consenso", color = NULL) +
+    labs(title = "LPIaren urtearteko bilakaera — Aralar",
+         subtitle = "Banda berdea = oreka (\u00b10.05) | Marra puntukatuak = larria (\u00b10.20)",
+         x = "Urtea", y = "LPI adostasuna", color = NULL) +
     theme_minimal(base_size = 13) +
     theme(plot.title = element_text(face = "bold"), legend.position = "top")
 
@@ -1271,9 +1281,10 @@ if (nrow(diag_years) > 0) {
              ymin = -0.05, ymax = 0.05,
              fill = "#4daf4a", alpha = 0.08) +
     scale_fill_brewer(palette = "Set2") +
+    scale_x_discrete(labels = nombres_zona) +
     coord_flip() +
-    labs(title = "IPP por zona y ano — Aralar",
-         x = NULL, y = "IPP consenso", fill = "Ano") +
+    labs(title = "LPIa zonaka eta urteka — Aralar",
+         x = NULL, y = "LPI adostasuna", fill = "Urtea") +
     theme_minimal(base_size = 13) +
     theme(plot.title = element_text(face = "bold"))
 
@@ -1287,13 +1298,13 @@ diag_pasto <- diag_global %>%
   filter(grepl("pasto", zona)) %>%
   mutate(
     anillo = case_when(
-      grepl("cercano", zona)     ~ "Cercano (<500m)",
-      grepl("intermedio", zona)  ~ "Intermedio (500-1500m)",
-      grepl("remoto", zona)      ~ "Remoto (>1500m)"
+      grepl("cercano", zona)     ~ "Hurbila (<500m)",
+      grepl("intermedio", zona)  ~ "Ertaina (500-1500m)",
+      grepl("remoto", zona)      ~ "Urruna (>1500m)"
     ),
-    anillo = factor(anillo, levels = c("Cercano (<500m)",
-                                        "Intermedio (500-1500m)",
-                                        "Remoto (>1500m)"))
+    anillo = factor(anillo, levels = c("Hurbila (<500m)",
+                                        "Ertaina (500-1500m)",
+                                        "Urruna (>1500m)"))
   )
 
 if (nrow(diag_pasto) > 0) {
@@ -1304,12 +1315,12 @@ if (nrow(diag_pasto) > 0) {
     geom_text(aes(label = round(IPP_consenso, 3)),
               vjust = ifelse(diag_pasto$IPP_consenso < 0, 1.5, -0.5),
               size = 4.5, fontface = "bold") +
-    scale_fill_manual(values = c("Cercano (<500m)" = "#d73027",
-                                  "Intermedio (500-1500m)" = "#fee08b",
-                                  "Remoto (>1500m)" = "#1a9850")) +
-    labs(title = "IPP pastoral vs. distancia a bordas — Aralar",
-         subtitle = "Si IPP es mas negativo cerca de bordas = senal pastoral coherente",
-         x = "Anillo de distancia a bordas", y = "IPP consenso") +
+    scale_fill_manual(values = c("Hurbila (<500m)" = "#d73027",
+                                  "Ertaina (500-1500m)" = "#fee08b",
+                                  "Urruna (>1500m)" = "#1a9850")) +
+    labs(title = "Larre-LPIa eta bordetarainoko distantzia — Aralar",
+         subtitle = "LPIa negatiboagoa bordetatik hurbil = larre-seinale koherentea",
+         x = "Bordetarainoko distantzia-eraztuna", y = "LPI adostasuna") +
     theme_minimal(base_size = 13) +
     theme(plot.title = element_text(face = "bold"))
   
@@ -1321,11 +1332,11 @@ if (nrow(diag_pasto) > 0) {
 diag_tipo <- diag_global %>%
   mutate(
     tipo_hab = case_when(
-      grepl("pasto", zona)   ~ "Pasto",
-      grepl("brezal", zona)  ~ "Brezal",
-      grepl("hayedo", zona)  ~ "Hayedo",
-      grepl("encinar", zona) ~ "Encinar",
-      TRUE ~ "Otro"
+      grepl("pasto", zona)   ~ "Larrea",
+      grepl("brezal", zona)  ~ "Txilardia",
+      grepl("hayedo", zona)  ~ "Pagadia",
+      grepl("encinar", zona) ~ "Artadia",
+      TRUE ~ "Bestelakoa"
     )
   )
 
@@ -1335,11 +1346,12 @@ p_tipo <- ggplot(diag_tipo, aes(x = reorder(zona, IPP_consenso),
   geom_col(width = 0.7) +
   geom_hline(yintercept = 0) +
   geom_hline(yintercept = c(-0.05, 0.05), linetype = "dashed", color = "grey60") +
-  scale_fill_manual(values = c("Pasto" = "#33a02c", "Brezal" = "#e31a1c",
-                                "Hayedo" = "#1f78b4", "Encinar" = "#ff7f00")) +
+  scale_fill_manual(values = c("Larrea" = "#33a02c", "Txilardia" = "#e31a1c",
+                                "Pagadia" = "#1f78b4", "Artadia" = "#ff7f00")) +
+  scale_x_discrete(labels = nombres_zona) +
   coord_flip() +
-  labs(title = "IPP por habitat y anillo — Aralar (Global)",
-       x = NULL, y = "IPP consenso", fill = "Tipo habitat") +
+  labs(title = "LPIa habitat eta eraztunka — Aralar (Globala)",
+       x = NULL, y = "LPI adostasuna", fill = "Habitat mota") +
   theme_minimal(base_size = 13) +
   theme(plot.title = element_text(face = "bold"))
 
@@ -1359,10 +1371,10 @@ diag_long <- diag_global %>%
   mutate(
     estrategia = factor(estrategia,
       levels = c("IPP_A", "IPP_B", "IPP_C", "IPP_D"),
-      labels = c("A: GAM climatico",
-                 "B: Pseudo-referencia interna",
-                 "C: Anomalia espacial",
-                 "D: Referencia hayedo"))
+      labels = c("A: GAM klimatikoa",
+                 "B: Barneko pseudo-erreferentzia",
+                 "C: Anomalia espaziala",
+                 "D: Pagadi-erreferentzia"))
   ) %>%
   filter(!is.na(IPP))
 
@@ -1373,18 +1385,19 @@ if (nrow(diag_long) > 0) {
     geom_hline(yintercept = c(-0.05, 0.05), linetype = "dashed",
                color = "grey60") +
     scale_fill_manual(values = c(
-      "A: GAM climatico"             = "#1b9e77",
-      "B: Pseudo-referencia interna" = "#d95f02",
-      "C: Anomalia espacial"         = "#7570b3",
-      "D: Referencia hayedo"         = "#e7298a"
+      "A: GAM klimatikoa"             = "#1b9e77",
+      "B: Barneko pseudo-erreferentzia" = "#d95f02",
+      "C: Anomalia espaziala"         = "#7570b3",
+      "D: Pagadi-erreferentzia"       = "#e7298a"
     )) +
     geom_text(aes(label = round(IPP, 3)),
               position = position_dodge(width = 0.8),
               vjust = ifelse(diag_long$IPP < 0, 1.3, -0.4),
               size = 2.8) +
-    labs(title = "Triangulacion metodologica del IPP — pastos de Aralar",
-         subtitle = "4 estrategias independientes; coincidencia de signo = diagnostico robusto",
-         x = NULL, y = "IPP", fill = "Estrategia") +
+    scale_x_discrete(labels = nombres_zona) +
+    labs(title = "LPIaren triangulazio metodologikoa — Aralarko larreak",
+         subtitle = "4 estrategia independente; zeinuan bat etortzea = diagnostiko sendoa",
+         x = NULL, y = "LPI", fill = "Estrategia") +
     theme_minimal(base_size = 12) +
     theme(plot.title = element_text(face = "bold"),
           legend.position = "top",
@@ -1392,12 +1405,12 @@ if (nrow(diag_long) > 0) {
 
   ggsave("IPP_triangulacion_ABCD.png", p_tri, width = 12, height = 7, dpi = 150)
   print(p_tri)
-  cat("\n✓ Grafico 9h: IPP_triangulacion_ABCD.png\n")
+  cat("\n✓ 9h grafikoa: IPP_triangulacion_ABCD.png\n")
 }
 
 
 # ── 9g. Validación cruzada leave-one-year-out ──
-cat("\n━━━ Validacion leave-one-year-out ━━━\n")
+cat("\n━━━ Leave-one-year-out balidazioa ━━━\n")
 years_avail <- sort(unique(lai_aoi$year))
 
 if (length(years_avail) >= 3) {
@@ -1430,15 +1443,15 @@ if (length(years_avail) >= 3) {
         r = round(r, 3)
       ))
     }, error = function(e) {
-      cat("  LOYO", yr_out, "fallo:", e$message, "\n")
+      cat("  LOYO", yr_out, "huts egin du:", e$message, "\n")
     })
   }
 
   if (nrow(loyo_results) > 0) {
     cat("\n")
     print(as.data.frame(loyo_results))
-    cat("RMSE medio LOYO:", round(mean(loyo_results$RMSE), 3), "\n")
-    cat("r medio LOYO:", round(mean(loyo_results$r), 3), "\n")
+    cat("LOYO batezbesteko RMSE:", round(mean(loyo_results$RMSE), 3), "\n")
+    cat("LOYO batezbesteko r:", round(mean(loyo_results$r), 3), "\n")
     write.csv(loyo_results, "validacion_loyo.csv", row.names = FALSE)
   }
 }
@@ -1449,13 +1462,13 @@ if (length(years_avail) >= 3) {
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 cat("\n\n", rep("=", 60), "\n")
-cat("  RESUMEN\n")
+cat("  LABURPENA\n")
 cat(rep("=", 60), "\n\n")
 
-cat("Modelo climatico seleccionado:", best_label, "\n")
+cat("Hautatutako klima-eredua:", best_label, "\n")
 cat("R2adj:", round(summary(best_mod)$adj.r.squared, 3), "\n\n")
 
-cat("━━━ Diagnostico global ━━━\n")
+cat("━━━ Diagnostiko globala ━━━\n")
 diag_global %>%
   select(zona, IPP_consenso, diagnostico, concordancia) %>%
   as.data.frame() %>% print()
@@ -1465,17 +1478,17 @@ ipp_cercano <- diag_global$IPP_consenso[diag_global$zona == "pasto_cercano"]
 ipp_interm  <- diag_global$IPP_consenso[diag_global$zona == "pasto_intermedio"]
 ipp_remoto  <- diag_global$IPP_consenso[diag_global$zona == "pasto_remoto"]
 
-cat("\nIPP pasto cercano (<500m):",   round(ipp_cercano, 3), "\n")
-cat("IPP pasto intermedio (500-1500m):", round(ipp_interm, 3), "\n")
-cat("IPP pasto remoto (>1500m):",    round(ipp_remoto, 3), "\n")
+cat("\nLPI larre hurbila (<500m):",   round(ipp_cercano, 3), "\n")
+cat("LPI larre ertaina (500-1500m):", round(ipp_interm, 3), "\n")
+cat("LPI larre urruna (>1500m):",    round(ipp_remoto, 3), "\n")
 
 if (length(ipp_cercano) > 0 && length(ipp_remoto) > 0) {
   if (ipp_cercano < ipp_remoto) {
-    cat("-> COHERENTE: IPP mas negativo cerca de bordas = senal pastoral confirmada.\n")
-    cat("   Gradiente: ", round(ipp_remoto - ipp_cercano, 3),
-        " unidades IPP por anillo.\n")
+    cat("-> KOHERENTEA: LPI negatiboagoa bordetatik hurbil = larre-seinalea berretsia.\n")
+    cat("   Gradientea: ", round(ipp_remoto - ipp_cercano, 3),
+        " LPI unitate eraztuneko.\n")
   } else {
-    cat("-> ATENCION: patron inverso al esperado. Revisar umbrales de distancia.\n")
+    cat("-> KONTUZ: itxarondakoaren aurkako patroia. Distantzia-atalaseak berrikusi.\n")
   }
 }
 
@@ -1484,16 +1497,16 @@ ipp_pastos  <- mean(diag_global$IPP_consenso[grepl("pasto", diag_global$zona)], 
 ipp_brezal  <- mean(diag_global$IPP_consenso[grepl("brezal", diag_global$zona)], na.rm = TRUE)
 ipp_hayedo  <- mean(diag_global$IPP_consenso[grepl("hayedo", diag_global$zona)], na.rm = TRUE)
 
-cat("\nIPP medio por tipo de habitat:\n")
-cat("  Pastos:", round(ipp_pastos, 3), "\n")
-if (!is.na(ipp_brezal)) cat("  Brezales:", round(ipp_brezal, 3), "\n")
-if (!is.na(ipp_hayedo)) cat("  Hayedos:", round(ipp_hayedo, 3), "\n")
+cat("\nLPI batezbestekoa habitat motaren arabera:\n")
+cat("  Larreak:", round(ipp_pastos, 3), "\n")
+if (!is.na(ipp_brezal)) cat("  Txilardiak:", round(ipp_brezal, 3), "\n")
+if (!is.na(ipp_hayedo)) cat("  Pagadiak:", round(ipp_hayedo, 3), "\n")
 
-cat("\n━━━ Ficheros exportados ━━━\n")
+cat("\n━━━ Esportatutako fitxategiak ━━━\n")
 cat("  comparacion_modelos.csv\n")
 cat("  diagnostico_pastoral.csv\n")
 for (f in list.files(pattern = "\\.png$")) cat(" ", f, "\n")
 
 cat("\n", rep("=", 60), "\n")
-cat("  Diagnostico completado.\n")
+cat("  Diagnostikoa burututa.\n")
 cat(rep("=", 60), "\n")
