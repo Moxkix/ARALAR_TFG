@@ -564,7 +564,16 @@ document.querySelectorAll('nav a').forEach(link => {
 });
 
 /* ═══════════════════ Dokumentuak / documentos / documents ═══════════════════ */
-const DOCS_REPO = 'Moxkix/ARALAR_TFG';
+// owner/repo autodetektatua GitHub Pages URLtik, txantiloi gisa klonatzean
+// edozein kontutan funtziona dezan; bestela, balio lehenetsia.
+const DOCS_REPO = (() => {
+  const m = location.hostname.match(/^([^.]+)\.github\.io$/i);
+  if (m) {
+    const seg = location.pathname.split('/').filter(Boolean)[0];
+    if (seg) return `${m[1]}/${seg}`;
+  }
+  return 'Moxkix/ARALAR_TFG';
+})();
 const DOCS_BRANCH = 'main';
 const DOCS_PATH = 'docs';
 const FIGURES_PATH = 'figures';
